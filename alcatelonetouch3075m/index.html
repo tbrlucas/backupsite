@@ -13,18 +13,61 @@
 <header class="site-header"><nav class="ios-navlinks" aria-label="Administration navigation">
 <a href="/">tbrlucas</a><a href="/blog/">View blog</a><a href="/alcatelonetouch3075m/" class="active" aria-current="page">Administration</a>
 </nav></header>
-<main class="page" id="main-content">
+<main class="page admin-page" id="main-content">
 <section class="section">
 <h1 class="ios-section-title page-title">Blog administration</h1>
-<div class="ios-panel copy-panel">
-<h2>Manage your publications</h2>
-<p>This is the private administration area for the tbrlucas blog.</p>
-<p><strong>Secure sign-in is not connected yet.</strong> The publishing panel will need GitHub authentication before it can create, edit, or delete posts in this repository.</p>
-<p>No password or access token is requested or stored on this page. That is intentional: credentials must never be exposed in public GitHub Pages files.</p>
-<p class="admin-status">Status: setup required</p>
+<div class="ios-panel admin-shell">
+<div id="admin-setup" class="admin-notice">
+<h2>Connect the administration service</h2>
+<p>The panel is ready for its secure GitHub connection. The separate Worker must be deployed and configured before sign-in can work.</p>
+<p id="admin-setup-detail" class="admin-muted">Checking configuration…</p>
+</div>
+
+<section id="admin-login" class="admin-login" hidden>
+<div class="admin-brand"><span class="admin-brand-icon">t</span><div><strong>tbrlucas</strong><small>Blog control panel</small></div></div>
+<h2>Sign in to continue</h2>
+<p>Only the GitHub account authorized for this blog can manage publications.</p>
+<button class="ios-button" id="login-button" type="button">Continue with GitHub</button>
+<p class="admin-small">Your GitHub password is never entered on this page.</p>
+</section>
+
+<section id="admin-app" hidden>
+<div class="admin-toolbar">
+<div><h2>Publications</h2><p id="admin-user" class="admin-muted"></p></div>
+<button class="ios-button gray" id="logout-button" type="button">Sign out</button>
+</div>
+<div class="admin-columns">
+<aside class="admin-posts">
+<div class="admin-posts-heading"><strong>All posts</strong><button class="ios10-button" id="new-post-button" type="button">＋ New</button></div>
+<div id="admin-post-list" class="admin-post-list"><p class="post-empty">Loading publications…</p></div>
+</aside>
+<form id="post-editor" class="admin-editor">
+<input type="hidden" id="post-original-slug">
+<label for="post-title">Title</label>
+<input class="ios-input" id="post-title" maxlength="120" required placeholder="Post title">
+<label for="post-slug">URL slug</label>
+<input class="ios-input" id="post-slug" maxlength="80" required pattern="[a-z0-9]+(?:-[a-z0-9]+)*" placeholder="post-url">
+<label for="post-date">Publication date</label>
+<input class="ios-input" id="post-date" type="date" required>
+<label for="post-excerpt">Short description</label>
+<textarea class="ios-input admin-textarea" id="post-excerpt" maxlength="240" rows="2" placeholder="A short summary for the post list"></textarea>
+<label for="post-content">Content</label>
+<textarea class="ios-input admin-content" id="post-content" rows="12" required placeholder="Write your post here. Separate paragraphs with a blank line."></textarea>
+<label class="admin-publish"><input id="post-published" type="checkbox" checked> Publish this post</label>
+<div class="admin-actions">
+<button class="ios-button" id="save-post-button" type="submit">Save publication</button>
+<button class="ios-button gray" id="cancel-edit-button" type="button">Clear</button>
+<button class="ios-button red" id="delete-post-button" type="button" hidden>Delete</button>
+</div>
+<p id="admin-message" class="admin-message" role="status" aria-live="polite"></p>
+</form>
+</div>
+</section>
 </div>
 </section>
 <p class="back-home"><a href="/">← Back to tbrlucas</a></p>
 </main>
 <script src="../assets/js/main.js" defer></script>
+<script src="../assets/js/admin-config.js" defer></script>
+<script src="../assets/js/admin.js" defer></script>
 </body></html>
