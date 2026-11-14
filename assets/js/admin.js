@@ -144,7 +144,8 @@
     try {
       $("save-post-button").disabled = true;
       message("Saving to GitHub…");
-      const data = await api("/api/posts", { method: "POST", body: JSON.stringify({ action:"save", post }) });
+      const originalSlug = $("post-original-slug").value.trim();
+      const data = await api("/api/posts", { method: "POST", body: JSON.stringify({ action:"save", originalSlug, post }) });
       posts = data.posts;
       renderPosts();
       $("post-original-slug").value = post.slug;
