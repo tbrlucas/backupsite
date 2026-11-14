@@ -103,7 +103,13 @@
           <label for="download-description">Description</label><textarea class="input-block-level admin-textarea" id="download-description" rows="2" maxlength="500" required placeholder="What does this app or file do?"></textarea>
           <label for="download-compatibility">Device / OS compatibility</label><input class="input-block-level" id="download-compatibility" maxlength="240" placeholder="e.g. iOS 6–9, iPhone 4 or newer">
           <div class="row-fluid"><div class="span4"><label for="download-version">Version</label><input class="input-block-level" id="download-version" maxlength="40"></div><div class="span4"><label for="download-size">File size</label><input class="input-block-level" id="download-size" maxlength="40" placeholder="e.g. 12 MB"></div><div class="span4"><label for="download-type">File type</label><input class="input-block-level" id="download-type" maxlength="40" placeholder="IPA, APK, ZIP…"></div></div>
-          <label for="download-url">Download URL (HTTPS)</label><input class="input-block-level" id="download-url" type="url" maxlength="2000" required placeholder="https://…">
+          <div class="admin-upload-box">
+            <label for="download-file">Upload file to GitHub</label>
+            <div class="admin-upload-controls"><input id="download-file" type="file" accept=".ipa,.apk,.zip,.deb,.dylib,.exe,.msi,.7z,.tar,.gz,.pdf"><button class="btn" id="upload-download-file" type="button">Upload file</button></div>
+            <p class="admin-small">Files are stored in this repository under <code>downloads/files/</code>. Maximum size: 40 MB.</p>
+            <p id="download-upload-message" class="admin-message" role="status" aria-live="polite"></p>
+          </div>
+          <label for="download-url">Download URL (HTTPS)</label><input class="input-block-level" id="download-url" type="url" maxlength="2000" required placeholder="Upload a file or paste an HTTPS link">
           <label for="download-notes">Additional notes</label><textarea class="input-block-level admin-textarea" id="download-notes" rows="2" maxlength="1000" placeholder="Optional notes for visitors"></textarea>
           <label class="admin-publish"><input id="download-published" type="checkbox" checked> Publish this download</label>
           <div class="admin-actions"><button class="btn btn-primary" id="save-download-button" type="submit">Save download</button><button class="btn" id="clear-download-button" type="button">Clear editor</button><button class="btn btn-danger" id="delete-download-button" type="button" hidden>Delete download</button></div>
