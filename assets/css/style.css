@@ -88,13 +88,18 @@ body { min-width:320px; padding-top:60px; }
 }
 
 
-/* Translation control — styled like the Bootstrap 2 navigation. */
-.translate-item a { white-space:nowrap; }
-.google-translate-hidden {
-  position:absolute !important;
-  left:-10000px !important;
-  top:0 !important;
-  width:1px !important;
-  height:1px !important;
-  overflow:hidden !important;
+
+/* GTranslate selector integrated with the Bootstrap 2 navigation. */
+.translate-item { padding:5px 10px; }
+.translate-item .gtranslate_wrapper { display:inline-block; }
+.translate-item .gt_selector {
+  max-width:150px;
+  margin:0;
+  padding:3px 5px;
+  font-size:12px;
+  line-height:18px;
+}
+@media (max-width:767px) {
+  .translate-item { padding:6px 15px; }
+  .translate-item .gt_selector { max-width:100%; }
 }
