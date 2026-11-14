@@ -110,7 +110,7 @@ export default {
         const code = url.searchParams.get("code"); const state = url.searchParams.get("state");
         if (!code || !state || await env.AUTH_KV.get("oauth:" + state) !== "1") return new Response("Invalid or expired sign-in request.",{status:400});
         await env.AUTH_KV.delete("oauth:" + state);
-        const tokenResponse = await fetch("https://github.com/login/oauth/access_token",{method:"POST",headers:{"Accept":"application/json","Content-Type":"application/json"},body:JSON.stringify({client_id:env.GITHUB_OAUTH_CLIENT_ID,client_secret:env.GITHUB_OAUTH_CLIENT_SECRET,code})});
+        const tokenResponse = await fetch("https://github.com/login/oauth/access_token",{method:"POST",headers:{"Accept":"application/json","Content-Type":"application/json"},body:JSON.stringify({client_id:env.GITHUB_OAUTH_CLIENT_ID,client_secret:env.GITHUB_OAUTH_CLIENT_SECRET,code,redirect_uri:env.GITHUB_CALLBACK_URL})});
         const tokenData = await tokenResponse.json();
         if (!tokenData.access_token) return new Response("GitHub sign-in failed.",{status:401});
         const user = await githubRequest("/user",tokenData.access_token);
