@@ -171,6 +171,40 @@ export default {
         } else return json({error:"Unknown action."},400,origin);
         await writePosts(env,token,posts,result.sha); return json({posts},200,origin);
       }
+
+      if (url.pathname === "/api/upload" && request.method === "POST") {
+        const form = await request.formData();
+        const file = form.get("file");
+        const slug = String(form.get("slug") || "");
+        if (!file || typeof file.arrayBuffer !== "function") return json({error:"Choose a file to upload."},400,origin);
+        if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return json({error:"Enter a valid download name before uploading."},400,origin);
+        if (file.size < 1 || file.size > 40 * 1024 * 1024) return json({error:"Files must be between 1 byte and 40 MB."},413,origin);
+        const originalName = String(file.name || "download.bin").split(/[\\/]/).pop();
+        const safeName = originalName.normalize("NFKD").replace(/[^a-zA-Z0-9._-]+/g,"-").replace(/^-+|-+$/g,"").slice(0,120) || "download.bin";
+        const filePath = "downloads/files/" + slug + "/" + safeName;
+        const token = await installationToken(env);
+        const encodedPath = filePath.split("/").map(encodeURIComponent).join("/");
+        let existingSha = "";
+        try {
+          const existing = await githubRequest("/repos/" + env.REPO_OWNER + "/" + env.REPO_NAME + "/contents/" + encodedPath + "?ref=main", token);
+          existingSha = existing.sha || "";
+        } catch (error) {
+          if (!String(error.message).includes("Not Found")) throw error;
+        }
+        const bytes = new Uint8Array(await file.arrayBuffer());
+        let binary = "";
+        for (let offset = 0; offset < bytes.length; offset += 0x8000) {
+          binary += String.fromCharCode(...bytes.subarray(offset, Math.min(offset + 0x8000, bytes.length)));
+        }
+        const path = "/repos/" + env.REPO_OWNER + "/" + env.REPO_NAME + "/contents/" + encodedPath;
+        await githubRequest(path, token, {method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+          message:"Upload download file: " + safeName, content:btoa(binary), branch:"main", ...(existingSha ? {sha:existingSha} : {})
+        })});
+        const publicUrl = "https://tbrlucas.github.io/" + filePath.split("/").map(encodeURIComponent).join("/");
+        const sizeMb = (file.size / (1024 * 1024)).toFixed(1) + " MB";
+        const extension = safeName.includes(".") ? safeName.split(".").pop().toUpperCase() : "FILE";
+        return json({ok:true,path:filePath,url:publicUrl,fileSize:sizeMb,fileType:extension},200,origin);
+      }
       if (url.pathname === "/api/downloads" && (request.method === "GET" || request.method === "POST")) {
         const token = await installationToken(env);
         if (request.method === "GET") { const result = await readDownloads(env,token); return json({downloads:result.downloads.downloads || []},200,origin); }
