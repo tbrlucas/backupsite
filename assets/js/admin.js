@@ -255,64 +255,6 @@
     } finally { $("upload-download-file").disabled = false; }
   });
 
-  $("show-posts-tab").addEventListener("click", () => {
-    show($("admin-posts-section"), true); show($("admin-downloads-section"), false);
-    $("show-posts-tab").classList.add("btn-primary"); $("show-downloads-tab").classList.remove("btn-primary");
-  });
-  $("show-downloads-tab").addEventListener("click", () => {
-    show($("admin-posts-section"), false); show($("admin-downloads-section"), true);
-    $("show-downloads-tab").classList.add("btn-primary"); $("show-posts-tab").classList.remove("btn-primary");
-    if (!$("admin-download-list").dataset.loaded) {
-      loadDownloads().then(() => $("admin-download-list").dataset.loaded = "1").catch(error => downloadMessage(error.message, true));
-    }
-  });
-  $("new-download-button").addEventListener("click", clearDownloadEditor);
-  $("clear-download-button").addEventListener("click", clearDownloadEditor);
-  $("download-title").addEventListener("input", () => {
-    if (!$("download-original-slug").value) $("download-slug").value = slugify($("download-title").value);
-  });
-  $("download-url").addEventListener("input", () => $("download-url").setCustomValidity(""));
-  $("download-editor").addEventListener("submit", async event => {
-    event.preventDefault();
-    const item = {
-      slug:$("download-slug").value.trim(), title:$("download-title").value.trim(),
-      platform:$("download-platform").value, description:$("download-description").value.trim(),
-      compatibility:$("download-compatibility").value.trim(), version:$("download-version").value.trim(),
-      fileSize:$("download-size").value.trim(), fileType:$("download-type").value.trim(),
-      url:$("download-url").value.trim(), notes:$("download-notes").value.trim(),
-      published:$("download-published").checked
-    };
-    if (!item.url) {
-      $("download-url").setCustomValidity("Upload a file or paste an HTTPS link before saving.");
-      $("download-url").reportValidity();
-      return;
-    }
-    $("download-url").setCustomValidity("");
-    try {
-      $("save-download-button").disabled = true; downloadMessage("Saving to GitHub…");
-      const originalSlug = $("download-original-slug").value.trim();
-      const data = await api("/api/downloads", {method:"POST",body:JSON.stringify({action:"save",originalSlug,download:item})});
-      downloads = data.downloads; renderDownloads();
-      $("admin-download-list").dataset.loaded = "1";
-      $("download-original-slug").value = item.slug;
-      $("delete-download-button").hidden = false; $("save-download-button").textContent = "Update download";
-      downloadMessage("Saved and committed to GitHub.");
-    } catch (error) { downloadMessage(error.message, true); }
-    finally { $("save-download-button").disabled = false; }
-  });
-  $("delete-download-button").addEventListener("click", async () => {
-    const slug = $("download-original-slug").value;
-    if (!slug || !confirm("Delete this download? This change will be committed to GitHub.")) return;
-    try {
-      $("delete-download-button").disabled = true; downloadMessage("Deleting from GitHub…");
-      const data = await api("/api/downloads",{method:"POST",body:JSON.stringify({action:"delete",slug})});
-      downloads = data.downloads; renderDownloads(); clearDownloadEditor();
-      downloadMessage("Download deleted.");
-    } catch (error) { downloadMessage(error.message,true); }
-    finally { $("delete-download-button").disabled = false; }
-  });
-
-
   let updates = [];
   const updateMessage = (text, isError = false) => {
     const target = $("update-message");
