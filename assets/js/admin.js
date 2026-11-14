@@ -22,7 +22,7 @@
   const loginMessage = (text = "") => { const target = $("admin-login-message"); if (target) target.textContent = text; };
   const localDate = () => { const date = new Date(); return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 10); };
   const slugify = (value) => value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 80);
+    .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 80).replace(/-+$/g, "");
 
   async function api(path, options = {}) {
     if (!apiBase) throw new Error("The administration API URL has not been configured.");
