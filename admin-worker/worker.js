@@ -2,6 +2,7 @@ const API = "https://api.github.com";
 const ADMIN_PATH = "/alcatelonetouch3075m/";
 const POSTS_PATH = "assets/data/posts.json";
 const DOWNLOADS_PATH = "assets/data/downloads.json";
+const WHATS_NEW_PATH = "assets/data/whats-new.json";
 
 function json(data, status = 200, origin = "") {
   return new Response(JSON.stringify(data), {status, headers:{
@@ -53,6 +54,31 @@ function validDownload(item) {
     && typeof item.notes === "string" && item.notes.length <= 1000
     && typeof item.url === "string" && /^https:\/\//i.test(item.url) && item.url.length <= 2000
     && typeof item.published === "boolean";
+}
+function validUpdate(item) {
+  if (!item || typeof item !== "object") return false;
+  const date = typeof item.date === "string" ? new Date(item.date + "T00:00:00Z") : null;
+  return /^[a-zA-Z0-9-]{1,80}$/.test(item.id || "")
+    && typeof item.title === "string" && item.title.trim().length > 0 && item.title.length <= 120
+    && typeof item.date === "string" && /^\\d{4}-\\d{2}-\\d{2}$/.test(item.date)
+    && date && !Number.isNaN(date.getTime()) && date.toISOString().slice(0,10) === item.date
+    && typeof item.time === "string" && /^([01]\\d|2[0-3]):[0-5]\\d$/.test(item.time)
+    && ["Website","Blog","Projects","Downloads","Other"].includes(item.category)
+    && ["New feature","Improvement","Fix","Announcement"].includes(item.type)
+    && typeof item.summary === "string" && item.summary.trim().length > 0 && item.summary.length <= 300
+    && typeof item.details === "string" && item.details.length <= 5000
+    && typeof item.published === "boolean";
+}
+async function readWhatsNew(env, token) {
+  const path = "/repos/" + env.REPO_OWNER + "/" + env.REPO_NAME + "/contents/" + WHATS_NEW_PATH + "?ref=main";
+  const file = await githubRequest(path, token);
+  return {updates:JSON.parse(base64ToUtf8(file.content)),sha:file.sha};
+}
+async function writeWhatsNew(env, token, updates, sha) {
+  const path = "/repos/" + env.REPO_OWNER + "/" + env.REPO_NAME + "/contents/" + WHATS_NEW_PATH;
+  return githubRequest(path, token, {method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+    message:"Manage What's New updates",content:utf8ToBase64(JSON.stringify({updates},null,2) + "\\n"),branch:"main",sha
+  })});
 }
 function corsOrigin(request, env) {
   const origin = request.headers.get("Origin") || "";
@@ -172,6 +198,24 @@ export default {
         await writePosts(env,token,posts,result.sha); return json({posts},200,origin);
       }
 
+
+      if (url.pathname === "/api/whats-new" && (request.method === "GET" || request.method === "POST")) {
+        const token = await installationToken(env);
+        if (request.method === "GET") { const result = await readWhatsNew(env,token); return json({updates:result.updates.updates || []},200,origin); }
+        const input = await request.json(); const result = await readWhatsNew(env,token);
+        let updates = Array.isArray(result.updates.updates) ? result.updates.updates : [];
+        if (input.action === "save") {
+          if (!validUpdate(input.update)) return json({error:"Check the update fields, date, time, category and type."},400,origin);
+          const index = updates.findIndex(item => item.id === input.update.id);
+          if (index >= 0) updates[index] = input.update;
+          else { if (updates.length >= 500) return json({error:"The update history has reached its 500-entry limit."},400,origin); updates.push(input.update); }
+        } else if (input.action === "delete") {
+          if (typeof input.id !== "string") return json({error:"An update ID is required."},400,origin);
+          const before = updates.length; updates = updates.filter(item => item.id !== input.id);
+          if (updates.length === before) return json({error:"The update was not found."},404,origin);
+        } else return json({error:"Unknown action."},400,origin);
+        await writeWhatsNew(env,token,updates,result.sha); return json({updates},200,origin);
+      }
       if (url.pathname === "/api/upload" && request.method === "POST") {
         const form = await request.formData();
         const file = form.get("file");
