@@ -1,7 +1,8 @@
 (() => {
   const list = document.getElementById("post-list");
   const article = document.getElementById("post-content");
-  if (!list && !article) return;
+  const homeList = document.getElementById("home-post-list");
+  if (!list && !article && !homeList) return;
 
   const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
@@ -13,24 +14,32 @@
       return response.json();
     })
     .then((data) => {
-      const posts = Array.isArray(data.posts) ? data.posts : [];
+      const posts = (Array.isArray(data.posts) ? data.posts : [])
+        .filter((post) => post.published !== false)
+        .sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
+
+      const itemMarkup = (post) => `<a class="blog-list-item" href="/blog/post.html?slug=${encodeURIComponent(post.slug || "")}">
+        <span class="blog-list-title">${escapeHtml(post.title || "Untitled")}</span>
+        <span class="blog-list-meta">${escapeHtml(post.date || "")}</span>
+        <span class="blog-list-excerpt">${escapeHtml(post.excerpt || "")}</span>
+      </a>`;
+
       if (list) {
-        if (!posts.length) {
-          list.innerHTML = '<p class="post-empty">There are no published posts yet. Check back soon!</p>';
-          return;
-        }
-        list.innerHTML = posts
-          .filter((post) => post.published !== false)
-          .sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")))
-          .map((post) => `<a class="blog-list-item" href="/blog/post.html?slug=${encodeURIComponent(post.slug || "")}">
-            <span class="blog-list-title">${escapeHtml(post.title || "Untitled")}</span>
-            <span class="blog-list-meta">${escapeHtml(post.date || "")}</span>
-            <span class="blog-list-excerpt">${escapeHtml(post.excerpt || "")}</span>
-          </a>`).join("") || '<p class="post-empty">There are no published posts yet. Check back soon!</p>';
+        list.innerHTML = posts.length
+          ? posts.map(itemMarkup).join("")
+          : '<p class="post-empty">There are no published posts yet. Check back soon!</p>';
       }
+
+      if (homeList) {
+        const latest = posts.slice(0, 3);
+        homeList.innerHTML = latest.length
+          ? latest.map(itemMarkup).join("") + '<p class="post-empty"><a href="/blog/">View all blog posts →</a></p>'
+          : '<p class="post-empty">New posts will appear here. Visit the <a href="/blog/">blog</a> to read all publications.</p>';
+      }
+
       if (article) {
         const slug = new URLSearchParams(location.search).get("slug");
-        const post = posts.find((item) => item.slug === slug && item.published !== false);
+        const post = posts.find((item) => item.slug === slug);
         if (!post) {
           article.innerHTML = '<div class="copy-panel"><h1>Post not found</h1><p>This post may have been moved or is not published.</p></div>';
           return;
@@ -44,5 +53,6 @@
       const message = '<p class="post-empty">Posts are temporarily unavailable.</p>';
       if (list) list.innerHTML = message;
       if (article) article.innerHTML = message;
+      if (homeList) homeList.innerHTML = message;
     });
 })();
