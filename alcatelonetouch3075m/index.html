@@ -3,91 +3,86 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#4f7fbf">
+<meta name="theme-color" content="#f5f7fa">
+<meta name="robots" content="noindex,nofollow">
 <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap-responsive.min.css">
 <link rel="stylesheet" href="../assets/css/style.css">
-<title>tbrlucas :: blog administration</title>
+<link rel="stylesheet" href="../assets/css/admin.css">
+<title>Blog administration :: tbrlucas</title>
 </head>
-<body>
+<body class="admin-body">
 <a class="skip-link" href="#main-content">Skip to content</a>
-<header class="site-header">
-  <div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-      <div class="container">
-        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse" aria-label="Toggle navigation">
-          <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-        </button>
-        <a class="brand" href="/">tbrlucas</a>
-        <div class="nav-collapse collapse"><ul class="nav">
-          <li><a href="/">Home</a></li>
-          <li><a href="https://tbrlucas.github.io/projects/">Projects</a></li>
-          <li><a href="/blog/">Blog</a></li>
-          <li><a href="/about/">About</a></li>
-          <li class="active"><a href="/alcatelonetouch3075m/">Administration</a></li>
-        </ul></div>
-      </div>
-    </div>
+<header class="admin-topbar">
+  <div class="container">
+    <a class="admin-site-brand" href="/" aria-label="Back to tbrlucas homepage"><span class="admin-brand-mark">t</span><span>tbrlucas <small>CONTENT ADMINISTRATION</small></span></a>
+    <a class="admin-back-link" href="/">Back to website <span aria-hidden="true">↗</span></a>
   </div>
 </header>
-<main class="page container admin-page" id="main-content">
-<section class="section">
-<h1 class="page-title">Blog administration</h1>
-<div class="well admin-shell">
-<div id="admin-setup" class="admin-notice">
-<h2>Connect the administration service</h2>
-<p>The panel is ready for its secure GitHub connection. The separate Worker must be deployed and configured before sign-in can work.</p>
-<p id="admin-setup-detail" class="admin-muted">Checking configuration…</p>
-</div>
+<main class="container admin-page" id="main-content">
+  <div class="admin-heading">
+    <div><p class="admin-eyebrow">CONTROL PANEL</p><h1>Blog administration</h1><p>Manage drafts and published articles.</p></div>
+    <span class="admin-private-label"><i></i> PRIVATE AREA</span>
+  </div>
+  <div class="well admin-shell">
+    <div id="admin-setup" class="admin-notice">
+      <div class="admin-notice-icon" aria-hidden="true">⚙</div>
+      <div><p class="admin-eyebrow">ONE-TIME SETUP</p><h2>Connect the administration service</h2>
+      <p>The panel needs its Cloudflare Worker connection before sign-in can be enabled.</p>
+      <p id="admin-setup-detail" class="admin-muted">Checking configuration…</p></div>
+    </div>
 
-<section id="admin-login" class="admin-login" hidden>
-<div class="admin-brand"><span class="admin-brand-icon">t</span><div><strong>tbrlucas</strong><small>Blog control panel</small></div></div>
-<h2>Sign in to continue</h2>
-<p>Only the GitHub account authorized for this blog can manage publications.</p>
-<button class="btn btn-primary" id="login-button" type="button">Continue with GitHub</button>
-<p class="admin-small">Your GitHub password is never entered on this page.</p>
-</section>
+    <section id="admin-login" class="admin-login" hidden>
+      <div class="admin-login-symbol" aria-hidden="true">t</div>
+      <p class="admin-eyebrow">SECURE SIGN-IN</p>
+      <h2>Welcome back</h2>
+      <p>Sign in with the authorized GitHub account to manage blog publications.</p>
+      <button class="btn btn-primary btn-large" id="login-button" type="button">Continue with GitHub <span aria-hidden="true">→</span></button>
+      <p class="admin-small">Your GitHub password is entered only on GitHub. It is never collected by this page.</p>
+    </section>
 
-<section id="admin-app" hidden>
-<div class="admin-toolbar">
-<div><h2>Publications</h2><p id="admin-user" class="admin-muted"></p></div>
-<button class="btn" id="logout-button" type="button">Sign out</button>
-</div>
-<div class="row-fluid admin-columns">
-<aside class="span4 admin-posts">
-<div class="admin-posts-heading"><strong>All posts</strong><button class="btn" id="new-post-button" type="button">＋ New</button></div>
-<div id="admin-post-list" class="admin-post-list"><p class="post-empty">Loading publications…</p></div>
-</aside>
-<form id="post-editor" class="span8 admin-editor">
-<input type="hidden" id="post-original-slug">
-<label for="post-title">Title</label>
-<input class="input-block-level" id="post-title" maxlength="120" required placeholder="Post title">
-<label for="post-slug">URL slug</label>
-<input class="input-block-level" id="post-slug" maxlength="80" required pattern="[a-z0-9]+(?:-[a-z0-9]+)*" placeholder="post-url">
-<label for="post-date">Publication date</label>
-<input class="input-block-level" id="post-date" type="date" required>
-<label for="post-excerpt">Short description</label>
-<textarea class="input-block-level admin-textarea" id="post-excerpt" maxlength="240" rows="2" placeholder="A short summary for the post list"></textarea>
-<label for="post-content">Content</label>
-<textarea class="input-block-level admin-content" id="post-content" rows="12" required placeholder="Write your post here. Separate paragraphs with a blank line."></textarea>
-<label class="admin-publish"><input id="post-published" type="checkbox" checked> Publish this post</label>
-<div class="admin-actions">
-<button class="btn btn-primary" id="save-post-button" type="submit">Save publication</button>
-<button class="btn" id="cancel-edit-button" type="button">Clear</button>
-<button class="btn btn-danger" id="delete-post-button" type="button" hidden>Delete</button>
-</div>
-<p id="admin-message" class="admin-message" role="status" aria-live="polite"></p>
-</form>
-</div>
-</section>
-</div>
-</section>
-<p class="back-home"><a href="/">← Back to tbrlucas</a></p>
+    <section id="admin-app" hidden>
+      <div class="admin-toolbar">
+        <div><p class="admin-eyebrow">YOUR CONTENT</p><h2>Publications</h2><p id="admin-user" class="admin-muted"></p></div>
+        <button class="btn" id="logout-button" type="button">Sign out</button>
+      </div>
+      <div class="row-fluid admin-columns">
+        <aside class="span4 admin-posts">
+          <div class="admin-posts-heading"><strong>All posts</strong><button class="btn btn-small" id="new-post-button" type="button">＋ New post</button></div>
+          <div id="admin-post-list" class="admin-post-list"><p class="post-empty">Loading publications…</p></div>
+          <p class="admin-sidebar-note">Select a post to edit it, or create a new draft.</p>
+        </aside>
+        <form id="post-editor" class="span8 admin-editor">
+          <div class="admin-editor-heading"><h3>Post editor</h3><span>Changes are saved to GitHub</span></div>
+          <input type="hidden" id="post-original-slug">
+          <label for="post-title">Title</label>
+          <input class="input-block-level" id="post-title" maxlength="120" required placeholder="Post title">
+          <div class="row-fluid">
+            <div class="span7"><label for="post-slug">URL slug</label><input class="input-block-level" id="post-slug" maxlength="80" required pattern="[a-z0-9]+(?:-[a-z0-9]+)*" placeholder="post-url"></div>
+            <div class="span5"><label for="post-date">Publication date</label><input class="input-block-level" id="post-date" type="date" required></div>
+          </div>
+          <label for="post-excerpt">Short description</label>
+          <textarea class="input-block-level admin-textarea" id="post-excerpt" maxlength="240" rows="2" placeholder="A short summary for the post list"></textarea>
+          <label for="post-content">Content</label>
+          <textarea class="input-block-level admin-content" id="post-content" rows="12" required placeholder="Write your post here. Separate paragraphs with a blank line."></textarea>
+          <label class="admin-publish"><input id="post-published" type="checkbox" checked> Publish this post</label>
+          <div class="admin-actions">
+            <button class="btn btn-primary" id="save-post-button" type="submit">Save publication</button>
+            <button class="btn" id="cancel-edit-button" type="button">Clear editor</button>
+            <button class="btn btn-danger" id="delete-post-button" type="button" hidden>Delete post</button>
+          </div>
+          <p id="admin-message" class="admin-message" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </div>
+  <footer class="admin-footer"><span>tbrlucas · Blog tools</span><a href="/">Return to the public site</a></footer>
 </main>
 <script src="../assets/js/main.js" defer></script>
 <script src="../assets/js/admin-config.js" defer></script>
 <script src="../assets/js/admin.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
-</body></html>
+</body>
+</html>
