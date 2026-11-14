@@ -1,6 +1,6 @@
-# tbrlucas blog administration service
+# tbrlucas content administration service
 
-This folder contains the Cloudflare Worker API used by the static admin panel at `/alcatelonetouch3075m/`.
+This folder contains the Cloudflare Worker API used by the static content panel at `/alcatelonetouch3075m/`.
 
 ## Architecture
 
@@ -9,7 +9,8 @@ This folder contains the Cloudflare Worker API used by the static admin panel at
 - The GitHub App user-authorization flow identifies the administrator. The Worker checks the exact login in `ADMIN_GITHUB_LOGIN`.
 - The Worker creates short-lived opaque browser sessions in Cloudflare KV.
 - For repository operations, the Worker creates a short-lived installation token limited to the installed repository and Contents permission.
-- Posts are stored in `assets/data/posts.json` on branch `main`.
+- Blog posts are stored in `assets/data/posts.json` on branch `main`.
+- Download entries are stored in `assets/data/downloads.json` on branch `main`; the actual files are hosted at their HTTPS URLs.
 
 ## Required setup
 
