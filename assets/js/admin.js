@@ -151,7 +151,7 @@
       $("post-original-slug").value = post.slug;
       $("delete-post-button").hidden = false;
       $("save-post-button").textContent = "Update publication";
-      message("Saved. GitHub is committing the change.");
+      message("Saved and committed to GitHub.");
     } catch (error) { message(error.message, true); }
     finally { $("save-post-button").disabled = false; }
   });
