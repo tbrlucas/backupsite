@@ -17,58 +17,143 @@
 <body>
 <a class="skip-link" href="#main-content">Skip to content</a>
 <header class="site-header">
-  <div class="navbar">
-    <div class="navbar-inner">
-      <div class="container">
-        <a class="brand" href="/">tbrlucas</a>
+  <div class="navbar navbar-fixed-top">
+    <div class="navbar-inner"><div class="container">
+      <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse" aria-label="Toggle navigation">
+        <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+      </button>
+      <a class="brand" href="/">tbrlucas</a>
+      <div class="nav-collapse collapse">
         <ul class="nav">
           <li class="active"><a href="/">Home</a></li>
           <li><a href="https://tbrlucas.github.io/projects/">Projects</a></li>
           <li><a href="/blog/">Blog</a></li>
           <li><a href="/about/">About</a></li>
-          
         </ul>
       </div>
-    </div>
+    </div></div>
   </div>
 </header>
-<main class="page container" id="main-content">
-<section class="hero-unit" aria-labelledby="hero-title">
-<div class="row-fluid"><div class="span4"><img class="hero-image" src="https://bag-xml.com/assets/img/NewFlyout.png" alt="Illustration"></div><div class="span8">
-<div class="hero-copy">
-<h1 id="hero-title">Start with the basics</h1>
-<p>Grab your old device—on this site, I’ll give you recommendations on what to do with it, whether it’s an iPhone, an iPad, or even an old Android.</p>
-</div></div></div>
-</section>
 
-<section class="section intro-copy" aria-labelledby="welcome-title">
-<h2  id="welcome-title">Welcome to my site!</h2>
-<div class="well">
-<p>Here, you’ll find tips on what to do with the devices you no longer use.</p>
-<p>Why throw them away when you can bring them back to life? This is the perfect place for that.</p>
-<p>(I know there are plenty of other sites that promise the same thing, but... mine has more stuff, lol.)</p>
-<p>Check out the <a href="/blog/">blog posts</a>! Take a look—they’re written in a way that offers a whole new learning experience... (that sounded a bit like a sales pitch for an online course, didn't it?)</p>
-</div>
-</section>
+<main class="container page" id="main-content">
+  <section class="row hero-row" aria-labelledby="hero-title">
+    <div class="span4 hero-art">
+      <img class="hero-image" src="https://bag-xml.com/assets/img/NewFlyout.png" alt="Illustration of a classic mobile device">
+    </div>
+    <div class="span8 hero-copy">
+      <h1 id="hero-title">Start with the basics</h1>
+      <p class="lead">Grab your old device—on this site, I’ll give you recommendations on what to do with it, whether it’s an iPhone, an iPad, or even an old Android.</p>
+      <p><a class="btn btn-large btn-primary" href="/projects/">Explore projects</a></p>
+    </div>
+  </section>
 
-<section class="section" id="blog" aria-labelledby="blog-title">
-<h2  id="blog-title">Blog Posts</h2>
-<div class="well post-list" id="home-post-list" aria-live="polite"><p class="post-empty">New posts will appear here. Visit the <a href="/blog/">blog</a> to read all publications.</p></div>
-</section>
+  <hr>
+  <section class="section" aria-labelledby="welcome-title">
+    <h2 id="welcome-title">Welcome to my site!</h2>
+    <div class="row">
+      <div class="span8">
+        <p>Here, you’ll find tips on what to do with the devices you no longer use.</p>
+        <p>Why throw them away when you can bring them back to life? This is the perfect place for that.</p>
+        <p>(I know there are plenty of other sites that promise the same thing, but... mine has more stuff, lol.)</p>
+        <p>Check out the <a href="/blog/">blog posts</a>! Take a look—they’re written in a way that offers a whole new learning experience... (that sounded a bit like a sales pitch for an online course, didn't it?)</p>
+      </div>
+      <div class="span4">
+        <div class="well start-panel">
+          <h3>Start exploring</h3>
+          <ul>
+            <li><a href="/projects/">Projects</a></li>
+            <li><a href="/blog/">Blog posts</a></li>
+            <li><a href="/about/">About this site</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<section class="section well android-feature" aria-labelledby="android-title">
-<div class="row-fluid"><div class="span4"><img src="https://s2-techtudo.glbimg.com/gghHZHEDuHtfqgqav566zxGKKQg=/0x24:1024x858/984x0/smart/filters:strip_icc()/s.glbimg.com/po/tt2/f/original/2013/07/22/galaxy-s-1_1.jpg" alt="Samsung Galaxy S, first generation"></div>
-<div class="span8">
-<h2 id="android-title">What can I do with my old Android?</h2>
-<p>We’ll cover that, too!</p>
-<p>Keep an eye out for the blog posts dedicated to it.</p>
-</div></div>
-</section>
+  <hr>
+  <section class="section" aria-labelledby="devices-title">
+    <h2 id="devices-title">Explore older devices</h2>
+    <div id="deviceCarousel" class="carousel slide feature-carousel" data-interval="6500">
+      <ol class="carousel-indicators">
+        <li data-target="#deviceCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#deviceCarousel" data-slide-to="1"></li>
+        <li data-target="#deviceCarousel" data-slide-to="2"></li>
+      </ol>
+      <div class="carousel-inner">
+        <div class="active item">
+          <div class="feature-slide">
+            <h3>iPhone and iPad</h3>
+            <p>Discover apps, settings and practical ideas for older Apple devices.</p>
+            <a class="btn btn-primary" href="/blog/">Explore the blog</a>
+          </div>
+        </div>
+        <div class="item">
+          <div class="feature-slide">
+            <h3>Android devices</h3>
+            <p>There are plenty of possibilities for older Android phones and tablets, too.</p>
+            <a class="btn btn-primary" href="#android-feature">See the Android feature</a>
+          </div>
+        </div>
+        <div class="item">
+          <div class="feature-slide">
+            <h3>Practical guides</h3>
+            <p>Clear explanations and recommendations to help you decide what to do with a device.</p>
+            <a class="btn btn-primary" href="/about/">Learn about the site</a>
+          </div>
+        </div>
+      </div>
+      <a class="left carousel-control" href="#deviceCarousel" data-slide="prev" aria-label="Previous slide">‹</a>
+      <a class="right carousel-control" href="#deviceCarousel" data-slide="next" aria-label="Next slide">›</a>
+    </div>
+  </section>
 
-<section class="section notice-copy">
-<p>Just so you know, I won’t ask for a single cent from you, and there are no ads on this site—I don’t need a simple webpage to make a living. And while we’ll be discussing ideas for your old devices, please note that I won’t be teaching you how to hack them or use them for anything illegal.</p>
-</section>
-<footer class="site-footer" id="about">© tbrlucas, <a href="/about/">learn more about this site</a> · 2016</footer>
+  <hr>
+  <section class="section row" id="android-feature" aria-labelledby="android-title">
+    <div class="span4 android-art">
+      <img src="https://s2-techtudo.glbimg.com/gghHZHEDuHtfqgqav566zxGKKQg=/0x24:1024x858/984x0/smart/filters:strip_icc()/s.glbimg.com/po/tt2/f/original/2013/07/22/galaxy-s-1_1.jpg" alt="First-generation Samsung Galaxy S">
+    </div>
+    <div class="span8">
+      <h2 id="android-title">What can I do with my old Android?</h2>
+      <p>We’ll cover that, too!</p>
+      <p>Keep an eye out for the blog posts dedicated to it.</p>
+      <p><a href="/blog/">Check out the blog posts</a></p>
+    </div>
+  </section>
+
+  <hr>
+  <section class="section" id="blog" aria-labelledby="blog-title">
+    <div class="row">
+      <div class="span8">
+        <h2 id="blog-title">Blog posts</h2>
+        <p>Check out the newest blog posts!</p>
+        <div class="well post-list" id="home-post-list" aria-live="polite">
+          <p class="post-empty">New posts will appear here. Visit the <a href="/blog/">blog</a> to read all publications.</p>
+        </div>
+      </div>
+      <div class="span4">
+        <div class="well blog-aside">
+          <h3>More to discover</h3>
+          <p>Browse the project pages for more work, or read the site information to learn what this project is about.</p>
+          <p><a href="/projects/">View projects</a></p>
+          <p><a href="/about/">About this site</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+  <section class="section notice-copy">
+    <p>Just so you know, I won’t ask for a single cent from you, and there are no ads on this site—I don’t need a simple webpage to make a living. And while we’ll be discussing ideas for your old devices, please note that I won’t be teaching you how to hack them or use them for anything illegal.</p>
+  </section>
+
+  <footer class="site-footer">
+    <ul class="breadcrumb"><li class="active">Home</li></ul>
+    <p><strong>© tbrlucas</strong> · <a href="/about/">learn more about this site</a> · 2016</p>
+  </footer>
 </main>
 <script src="assets/js/main.js" defer></script>
-</body></html>
+<script src="assets/js/blog.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+</body>
+</html>
