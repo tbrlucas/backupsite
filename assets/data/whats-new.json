@@ -1,3 +1,15 @@
 {
-  "updates": []
+  "updates": [
+    {
+      "id": "b8307c89-6b7e-4700-a99b-12273776d196",
+      "title": "New apps posted!",
+      "date": "2026-11-14",
+      "time": "20:50",
+      "category": "Downloads",
+      "type": "Announcement",
+      "summary": "new apps",
+      "details": "New apps posted!\nCheck https://tbrlucas.github.io/downloads/ to see new apps.\nThey were first posted for iOS, later published for Android...",
+      "published": true
+    }
+  ]
 }
