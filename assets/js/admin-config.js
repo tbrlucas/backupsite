@@ -1,4 +1,4 @@
-/* Set this to your deployed Cloudflare Worker URL, without a trailing slash. */
+/* Cloudflare Worker API endpoint. */
 window.TBRLUCAS_ADMIN_CONFIG = {
-  apiBase: ""
+  apiBase: "https://tbrlucas-blog-admin.skyzao77.workers.dev"
 };
