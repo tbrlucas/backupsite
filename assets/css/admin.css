@@ -70,3 +70,5 @@
   .admin-editor-heading { align-items:flex-start; flex-direction:column; }
   .admin-footer { flex-direction:column; }
 }
+
+.admin-login #admin-login-message:empty { display:none; }
