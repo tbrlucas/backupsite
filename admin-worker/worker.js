@@ -77,7 +77,7 @@ async function readWhatsNew(env, token) {
 async function writeWhatsNew(env, token, updates, sha) {
   const path = "/repos/" + env.REPO_OWNER + "/" + env.REPO_NAME + "/contents/" + WHATS_NEW_PATH;
   return githubRequest(path, token, {method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({
-    message:"Manage What's New updates",content:utf8ToBase64(JSON.stringify({updates},null,2) + "\\n"),branch:"main",sha
+    message:"Manage What's New updates",content:utf8ToBase64(JSON.stringify({updates},null,2) + "\n"),branch:"main",sha
   })});
 }
 function corsOrigin(request, env) {
