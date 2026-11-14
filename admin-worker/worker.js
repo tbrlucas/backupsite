@@ -1,6 +1,7 @@
 const API = "https://api.github.com";
 const ADMIN_PATH = "/alcatelonetouch3075m/";
 const POSTS_PATH = "assets/data/posts.json";
+const DOWNLOADS_PATH = "assets/data/downloads.json";
 
 function json(data, status = 200, origin = "") {
   return new Response(JSON.stringify(data), {status, headers:{
@@ -38,6 +39,20 @@ function validPost(post) {
     && typeof post.excerpt === "string" && post.excerpt.length <= 240
     && typeof post.content === "string" && post.content.length <= 50000
     && typeof post.published === "boolean";
+}
+function validDownload(item) {
+  if (!item || typeof item !== "object") return false;
+  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(item.slug || "")
+    && typeof item.title === "string" && item.title.trim().length > 0 && item.title.length <= 120
+    && ["iOS","Android","Other"].includes(item.platform)
+    && typeof item.description === "string" && item.description.trim().length > 0 && item.description.length <= 500
+    && typeof item.compatibility === "string" && item.compatibility.length <= 240
+    && typeof item.version === "string" && item.version.length <= 40
+    && typeof item.fileSize === "string" && item.fileSize.length <= 40
+    && typeof item.fileType === "string" && item.fileType.length <= 40
+    && typeof item.notes === "string" && item.notes.length <= 1000
+    && typeof item.url === "string" && /^https:\/\//i.test(item.url) && item.url.length <= 2000
+    && typeof item.published === "boolean";
 }
 function corsOrigin(request, env) {
   const origin = request.headers.get("Origin") || "";
@@ -83,6 +98,17 @@ async function readPosts(env, token) {
   const path = "/repos/" + env.REPO_OWNER + "/" + env.REPO_NAME + "/contents/" + POSTS_PATH + "?ref=main";
   const file = await githubRequest(path, token);
   return {posts:JSON.parse(base64ToUtf8(file.content)),sha:file.sha};
+}
+async function readDownloads(env, token) {
+  const path = "/repos/" + env.REPO_OWNER + "/" + env.REPO_NAME + "/contents/" + DOWNLOADS_PATH + "?ref=main";
+  const file = await githubRequest(path, token);
+  return {downloads:JSON.parse(base64ToUtf8(file.content)),sha:file.sha};
+}
+async function writeDownloads(env, token, downloads, sha) {
+  const path = "/repos/" + env.REPO_OWNER + "/" + env.REPO_NAME + "/contents/" + DOWNLOADS_PATH;
+  return githubRequest(path, token, {method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+    message:"Manage downloads library",content:utf8ToBase64(JSON.stringify({downloads},null,2) + "\n"),branch:"main",sha
+  })});
 }
 async function writePosts(env, token, posts, sha) {
   const path = "/repos/" + env.REPO_OWNER + "/" + env.REPO_NAME + "/contents/" + POSTS_PATH;
@@ -144,6 +170,27 @@ export default {
           if (posts.length === before) return json({error:"The post was not found."},404,origin);
         } else return json({error:"Unknown action."},400,origin);
         await writePosts(env,token,posts,result.sha); return json({posts},200,origin);
+      }
+      if (url.pathname === "/api/downloads" && (request.method === "GET" || request.method === "POST")) {
+        const token = await installationToken(env);
+        if (request.method === "GET") { const result = await readDownloads(env,token); return json({downloads:result.downloads.downloads || []},200,origin); }
+        const input = await request.json(); const result = await readDownloads(env,token);
+        let downloads = Array.isArray(result.downloads.downloads) ? result.downloads.downloads : [];
+        if (input.action === "save") {
+          if (!validDownload(input.download)) return json({error:"Check the download fields. Title, slug, platform, description and HTTPS URL are required."},400,origin);
+          const originalSlug = typeof input.originalSlug === "string" ? input.originalSlug : "";
+          const originalIndex = originalSlug ? downloads.findIndex(item => item.slug === originalSlug) : -1;
+          const duplicateIndex = downloads.findIndex(item => item.slug === input.download.slug);
+          if (originalSlug && originalIndex < 0) return json({error:"The original download was not found. Reload the list before saving."},404,origin);
+          if (duplicateIndex >= 0 && duplicateIndex !== originalIndex) return json({error:"Another download already uses this URL slug."},409,origin);
+          if (originalIndex >= 0) downloads[originalIndex] = input.download;
+          else { if (downloads.length >= 200) return json({error:"The downloads library has reached its 200-item limit."},400,origin); downloads.push(input.download); }
+        } else if (input.action === "delete") {
+          if (typeof input.slug !== "string") return json({error:"A download slug is required."},400,origin);
+          const before = downloads.length; downloads = downloads.filter(item => item.slug !== input.slug);
+          if (downloads.length === before) return json({error:"The download was not found."},404,origin);
+        } else return json({error:"Unknown action."},400,origin);
+        await writeDownloads(env,token,downloads,result.downloads.sha); return json({downloads},200,origin);
       }
       return json({error:"Not found."},404,origin);
     } catch (error) { return json({error:error.message || "Unexpected server error."},500,origin); }
