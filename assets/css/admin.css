@@ -1,0 +1,72 @@
+/* Alcatel admin panel — Bootstrap 2.3.2 companion styles */
+.admin-body { min-width:320px; padding:0 0 36px; background:#f3f5f8; color:#263445; }
+.admin-topbar { background:#fff; border-bottom:1px solid #dce2e9; }
+.admin-topbar .container { display:flex; align-items:center; justify-content:space-between; min-height:64px; }
+.admin-site-brand { display:flex; align-items:center; gap:11px; color:#263445; font-size:17px; font-weight:bold; text-decoration:none; }
+.admin-site-brand:hover { color:#263445; text-decoration:none; }
+.admin-site-brand small { display:block; margin-top:2px; color:#8a96a5; font-size:9px; letter-spacing:1.2px; font-weight:bold; }
+.admin-brand-mark, .admin-login-symbol { display:grid; place-items:center; width:38px; height:38px; border-radius:9px; background:#167ac6; color:#fff; font-size:25px; font-weight:bold; }
+.admin-back-link { color:#64748b; font-size:12px; }
+.admin-page { max-width:1080px; margin-top:34px; }
+.admin-heading { display:flex; justify-content:space-between; align-items:center; gap:18px; margin-bottom:20px; }
+.admin-heading h1 { margin:2px 0 5px; color:#1f2d3d; font-size:29px; letter-spacing:-.6px; }
+.admin-heading p { margin:0; color:#758195; }
+.admin-eyebrow { margin:0 0 6px !important; color:#167ac6 !important; font-size:10px !important; font-weight:bold; letter-spacing:1.5px; }
+.admin-private-label { padding:7px 10px; border:1px solid #dbe5ef; border-radius:20px; color:#60758b; background:#fff; font-size:10px; font-weight:bold; letter-spacing:.8px; white-space:nowrap; }
+.admin-private-label i { display:inline-block; width:7px; height:7px; margin-right:5px; border-radius:50%; background:#2aa876; }
+.admin-shell { padding:26px; border:1px solid #e0e6ed; border-radius:9px; background:#fff; box-shadow:0 8px 24px rgba(30,55,80,.06); }
+.admin-notice { display:flex; align-items:flex-start; gap:18px; max-width:680px; margin:12px auto; padding:20px; border:1px solid #e5ebf2; border-radius:8px; background:#f8fafc; }
+.admin-notice-icon { display:grid; place-items:center; flex:0 0 42px; width:42px; height:42px; border-radius:9px; color:#167ac6; background:#e8f3fc; font-size:21px; }
+.admin-notice h2, .admin-login h2 { margin:0 0 8px; color:#263445; font-size:21px; }
+.admin-notice p, .admin-login p { color:#64748b; }
+.admin-muted, .admin-small { color:#8591a1 !important; font-size:12px !important; }
+.admin-login { max-width:440px; margin:22px auto; padding:28px 20px; text-align:center; }
+.admin-login-symbol { width:52px; height:52px; margin:0 auto 17px; border-radius:14px; font-size:34px; }
+.admin-login .btn { margin:12px 0; padding:10px 18px; }
+.admin-toolbar { display:flex; justify-content:space-between; align-items:center; gap:15px; padding:0 0 18px; border-bottom:1px solid #e8edf2; }
+.admin-toolbar h2 { margin:0; color:#263445; font-size:23px; }
+.admin-toolbar p { margin:4px 0 0; }
+.admin-columns { padding-top:20px; }
+.admin-posts { padding-right:14px; box-sizing:border-box; }
+.admin-posts-heading { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:10px; color:#344256; }
+.admin-post-list { overflow:hidden; border:1px solid #e1e7ee; border-radius:7px; background:#fff; }
+.admin-post-row { display:block; width:100%; padding:12px 13px; border:0; border-bottom:1px solid #edf1f5; background:#fff; color:#344256; text-align:left; cursor:pointer; font:inherit; }
+.admin-post-row:last-child { border-bottom:0; }
+.admin-post-row:hover, .admin-post-row:focus { background:#f4f8fc; outline:0; }
+.admin-post-row strong, .admin-post-row span { display:block; overflow-wrap:anywhere; }
+.admin-post-row strong { color:#176fae; font-size:13px; }
+.admin-post-row span { margin-top:5px; color:#8995a4; font-size:10px; }
+.admin-sidebar-note { margin:9px 2px; color:#929dab; font-size:11px; }
+.admin-editor { box-sizing:border-box; padding:19px; border:1px solid #e1e7ee; border-radius:8px; background:#fbfcfd; }
+.admin-editor-heading { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid #e7edf3; }
+.admin-editor-heading h3 { margin:0; color:#344256; font-size:17px; }
+.admin-editor-heading span { color:#8995a4; font-size:10px; }
+.admin-editor label { margin:10px 0 5px; color:#526174; font-size:11px; font-weight:bold; }
+.admin-editor input[type="text"], .admin-editor input[type="date"], .admin-editor textarea { box-sizing:border-box; min-height:34px; border-color:#d8e0e8; border-radius:4px; box-shadow:none; background:#fff; }
+.admin-editor input:focus, .admin-editor textarea:focus { border-color:#70b4e6; box-shadow:0 0 0 2px rgba(22,122,198,.08); }
+.admin-textarea { min-height:72px; resize:vertical; }
+.admin-content { min-height:260px; line-height:1.6; resize:vertical; }
+.admin-publish { display:flex !important; align-items:center; gap:8px; font-weight:normal !important; }
+.admin-publish input { margin:0; }
+.admin-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+.admin-actions .btn-primary { background:#167ac6; background-image:linear-gradient(to bottom,#2695df,#126bad); border-color:#126bad; }
+.admin-message { min-height:18px; margin:10px 0 0; color:#27835d; font-size:11px; }
+.admin-message.error { color:#b94a48; }
+.admin-footer { display:flex; justify-content:space-between; gap:12px; margin-top:18px; color:#9aa4b1; font-size:11px; }
+.admin-footer a { color:#718096; }
+@media (max-width:767px) {
+  .admin-topbar .container { min-height:56px; }
+  .admin-back-link { font-size:11px; }
+  .admin-page { margin-top:20px; }
+  .admin-heading { align-items:flex-start; }
+  .admin-heading h1 { font-size:24px; }
+  .admin-private-label { margin-top:18px; }
+  .admin-shell { padding:13px; }
+  .admin-notice { padding:14px; }
+  .admin-columns { display:flex; flex-direction:column; }
+  .admin-posts, .admin-editor { float:none; width:100%; margin-left:0; }
+  .admin-posts { padding:0 0 18px; }
+  .admin-editor { padding:13px; }
+  .admin-editor-heading { align-items:flex-start; flex-direction:column; }
+  .admin-footer { flex-direction:column; }
+}
