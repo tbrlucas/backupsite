@@ -57,9 +57,9 @@
           <div class="admin-editor-heading"><h3>Post editor</h3><span>Changes are saved to GitHub</span></div>
           <input type="hidden" id="post-original-slug">
           <label for="post-title">Title</label>
-          <input class="input-block-level" id="post-title" maxlength="120" required placeholder="Post title">
+          <input class="input-block-level" id="post-title" type="text" maxlength="120" required placeholder="Post title">
           <div class="row-fluid">
-            <div class="span7"><label for="post-slug">URL slug</label><input class="input-block-level" id="post-slug" maxlength="80" required pattern="[a-z0-9]+(?:-[a-z0-9]+)*" placeholder="post-url"></div>
+            <div class="span7"><label for="post-slug">URL slug</label><input class="input-block-level" id="post-slug" type="text" maxlength="80" required pattern="[a-z0-9]+(?:-[a-z0-9]+)*" placeholder="post-url"></div>
             <div class="span5"><label for="post-date">Publication date</label><input class="input-block-level" id="post-date" type="date" required></div>
           </div>
           <label for="post-excerpt">Short description</label>
