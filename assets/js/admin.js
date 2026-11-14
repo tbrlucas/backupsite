@@ -28,7 +28,7 @@
     if (!apiBase) throw new Error("The administration API URL has not been configured.");
     const headers = new Headers(options.headers || {});
     if (session) headers.set("Authorization", `Bearer ${session}`);
-    if (options.body) headers.set("Content-Type", "application/json");
+    if (options.body && !(options.body instanceof FormData)) headers.set("Content-Type", "application/json");
     const response = await fetch(apiBase + path, { ...options, headers, mode: "cors" });
     const data = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(data.error || `Request failed (${response.status}).`);
@@ -231,6 +231,30 @@
     downloads = Array.isArray(data.downloads) ? data.downloads : [];
     renderDownloads();
   }
+
+  $("upload-download-file").addEventListener("click", async () => {
+    const fileInput = $("download-file");
+    const file = fileInput.files && fileInput.files[0];
+    if (!file) { $("download-upload-message").textContent = "Choose a file first."; return; }
+    if (file.size > 40 * 1024 * 1024) { $("download-upload-message").textContent = "This file is larger than the 40 MB limit."; return; }
+    const slug = $("download-slug").value.trim() || slugify($("download-title").value);
+    if (!slug) { $("download-upload-message").textContent = "Enter the application name first."; return; }
+    $("download-upload-message").textContent = "Uploading file to GitHub…";
+    $("upload-download-file").disabled = true;
+    try {
+      const body = new FormData();
+      body.append("file", file);
+      body.append("slug", slug);
+      const result = await api("/api/upload", {method:"POST", body});
+      $("download-url").value = result.url;
+      $("download-size").value = result.fileSize;
+      $("download-type").value = result.fileType;
+      $("download-upload-message").textContent = "Uploaded and committed to GitHub. The download URL was filled in.";
+    } catch (error) {
+      $("download-upload-message").textContent = "Upload failed: " + error.message;
+    } finally { $("upload-download-file").disabled = false; }
+  });
+
   $("show-posts-tab").addEventListener("click", () => {
     show($("admin-posts-section"), true); show($("admin-downloads-section"), false);
     $("show-posts-tab").classList.add("btn-primary"); $("show-downloads-tab").classList.remove("btn-primary");
