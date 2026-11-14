@@ -9,8 +9,7 @@ body { min-width: 320px; }
 .hero-copy p { font-size:18px; font-weight:200; line-height:1.4; }
 .post-empty { margin:0; padding:15px; color:#777; }
 .post-list { padding:0; }
-.android-feature { display:flex; align-items:center; gap:25px; }
-.android-feature img { display:block; width:36%; max-height:220px; object-fit:contain; padding:4px; border:1px solid #ddd; background:#fff; }
+.android-feature img { display:block; width:100%; max-height:220px; object-fit:contain; padding:4px; border:1px solid #ddd; background:#fff; }
 .android-feature h2 { margin-top:0; }
 .notice-copy { margin:20px 0; padding:15px; background:#f5f5f5; border:1px solid #ddd; border-radius:4px; }
 .site-footer { margin:24px 0 0; padding:16px 10px 24px; color:#999; font-size:12px; text-align:center; }
@@ -51,8 +50,7 @@ body { min-width: 320px; }
 [hidden] { display:none !important; }
 @media (max-width:767px) {
   .page.container { margin-top:15px; }
-  .android-feature { display:block; }
-  .android-feature img { width:100%; max-width:360px; margin:0 auto 18px; }
+  .android-feature img { max-width:360px; margin:0 auto 18px; }
   .admin-shell { padding:12px; }
   .admin-toolbar { align-items:flex-start; }
   .admin-actions .btn { flex:1 1 auto; }
