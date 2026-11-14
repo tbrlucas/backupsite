@@ -60,9 +60,9 @@ function validUpdate(item) {
   const date = typeof item.date === "string" ? new Date(item.date + "T00:00:00Z") : null;
   return /^[a-zA-Z0-9-]{1,80}$/.test(item.id || "")
     && typeof item.title === "string" && item.title.trim().length > 0 && item.title.length <= 120
-    && typeof item.date === "string" && /^\\d{4}-\\d{2}-\\d{2}$/.test(item.date)
+    && typeof item.date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(item.date)
     && date && !Number.isNaN(date.getTime()) && date.toISOString().slice(0,10) === item.date
-    && typeof item.time === "string" && /^([01]\\d|2[0-3]):[0-5]\\d$/.test(item.time)
+    && typeof item.time === "string" && /^([01]\d|2[0-3]):[0-5]\d$/.test(item.time)
     && ["Website","Blog","Projects","Downloads","Other"].includes(item.category)
     && ["New feature","Improvement","Fix","Announcement"].includes(item.type)
     && typeof item.summary === "string" && item.summary.trim().length > 0 && item.summary.length <= 300
