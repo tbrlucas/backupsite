@@ -39,6 +39,7 @@
       <h2>Welcome back</h2>
       <p>Sign in with the authorized GitHub account to manage blog publications.</p>
       <button class="btn btn-primary btn-large" id="login-button" type="button">Continue with GitHub <span aria-hidden="true">→</span></button>
+      <p id="admin-login-message" class="admin-message error" role="alert" aria-live="polite"></p>
       <p class="admin-small">Your GitHub password is entered only on GitHub. It is never collected by this page.</p>
     </section>
 
@@ -65,7 +66,7 @@
           <label for="post-excerpt">Short description</label>
           <textarea class="input-block-level admin-textarea" id="post-excerpt" maxlength="240" rows="2" placeholder="A short summary for the post list"></textarea>
           <label for="post-content">Content</label>
-          <textarea class="input-block-level admin-content" id="post-content" rows="12" required placeholder="Write your post here. Separate paragraphs with a blank line."></textarea>
+          <textarea class="input-block-level admin-content" id="post-content" rows="12" maxlength="50000" required placeholder="Write your post here. Separate paragraphs with a blank line."></textarea>
           <label class="admin-publish"><input id="post-published" type="checkbox" checked> Publish this post</label>
           <div class="admin-actions">
             <button class="btn btn-primary" id="save-post-button" type="submit">Save publication</button>
