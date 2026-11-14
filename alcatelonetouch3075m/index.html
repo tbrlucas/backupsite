@@ -41,7 +41,7 @@
     <div class="admin-login-mark" aria-hidden="true">t</div>
     <p class="admin-eyebrow">PRIVATE AREA</p>
     <h2>Welcome back</h2>
-    <p class="admin-intro">Sign in with the authorized GitHub account to manage blog posts and downloads.</p>
+    <p class="admin-intro">Sign in with the authorized GitHub account to manage website content.</p>
     <button class="btn btn-primary btn-large" id="login-button" type="button">Continue with GitHub <span aria-hidden="true">→</span></button>
     <p id="admin-login-message" class="admin-message error" role="alert" aria-live="polite"></p>
     <p class="admin-small">Authentication is handled by GitHub. This page never asks for or stores your GitHub password.</p>
@@ -56,6 +56,7 @@
     <nav class="admin-section-tabs" aria-label="Content sections">
       <button type="button" class="btn btn-primary" id="show-posts-tab">Blog posts</button>
       <button type="button" class="btn" id="show-downloads-tab">Downloads library</button>
+      <button type="button" class="btn" id="show-whats-new-tab">What’s New</button>
     </nav>
 
     <section id="admin-posts-section" class="admin-workspace">
@@ -81,6 +82,38 @@
           <label class="admin-publish"><input id="post-published" type="checkbox" checked> Publish this post</label>
           <div class="admin-actions"><button class="btn btn-primary" id="save-post-button" type="submit">Save publication</button><button class="btn" id="cancel-edit-button" type="button">Clear editor</button><button class="btn btn-danger" id="delete-post-button" type="button" hidden>Delete post</button></div>
           <p id="admin-message" class="admin-message" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
+
+    <section id="admin-whats-new-section" class="admin-workspace" hidden>
+      <div class="admin-section-heading">
+        <div><p class="admin-eyebrow">SITE UPDATES</p><h3>What’s New</h3><p>Publish release notes and changes visitors can follow.</p></div>
+        <button class="btn btn-primary" id="new-update-button" type="button">＋ New update</button>
+      </div>
+      <div class="row-fluid admin-columns">
+        <aside class="span4 admin-list-panel">
+          <div class="admin-panel-heading"><strong>All updates</strong><span>Choose one to edit</span></div>
+          <div id="admin-update-list" class="admin-post-list"><p class="post-empty">Open this section to load updates.</p></div>
+        </aside>
+        <form id="update-editor" class="span8 admin-editor-panel">
+          <div class="admin-panel-heading"><strong>Update editor</strong><span>Saved to GitHub</span></div>
+          <input type="hidden" id="update-original-id">
+          <label for="update-title">Title</label><input class="input-block-level" id="update-title" maxlength="120" required placeholder="What changed?">
+          <div class="row-fluid">
+            <div class="span4"><label for="update-date">Date</label><input class="input-block-level" id="update-date" type="date" required></div>
+            <div class="span3"><label for="update-time">Time</label><input class="input-block-level" id="update-time" type="time" required></div>
+            <div class="span5"><label for="update-category">Category</label><select class="input-block-level" id="update-category"><option>Website</option><option>Blog</option><option>Projects</option><option>Downloads</option><option>Other</option></select></div>
+          </div>
+          <div class="row-fluid">
+            <div class="span6"><label for="update-type">Update type</label><select class="input-block-level" id="update-type"><option>New feature</option><option>Improvement</option><option>Fix</option><option>Announcement</option></select></div>
+            <div class="span6"><label class="admin-publish"><input id="update-published" type="checkbox" checked> Publish this update</label></div>
+          </div>
+          <label for="update-summary">Summary</label><textarea class="input-block-level admin-textarea" id="update-summary" maxlength="300" rows="3" required placeholder="A short explanation shown in the timeline"></textarea>
+          <label for="update-details">Additional details (optional)</label><textarea class="input-block-level admin-content" id="update-details" maxlength="5000" rows="6" placeholder="More context, one point per line if useful"></textarea>
+          <div class="admin-actions"><button class="btn btn-primary" id="save-update-button" type="submit">Save update</button><button class="btn" id="clear-update-button" type="button">Clear editor</button><button class="btn btn-danger" id="delete-update-button" type="button" hidden>Delete update</button></div>
+          <p id="update-message" class="admin-message" role="status" aria-live="polite"></p>
         </form>
       </div>
     </section>
