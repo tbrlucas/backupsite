@@ -31,17 +31,20 @@ function utf8ToBase64(value) {
   return btoa(binary);
 }
 function validPost(post) {
-  return post && typeof post === "object"
-    && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(post.slug || "")
+  if (!post || typeof post !== "object") return false;
+  const date = typeof post.date === "string" ? new Date(post.date + "T00:00:00Z") : null;
+  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(post.slug || "")
     && typeof post.title === "string" && post.title.trim().length > 0 && post.title.length <= 120
     && typeof post.date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(post.date)
+    && date && !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === post.date
     && typeof post.excerpt === "string" && post.excerpt.length <= 240
     && typeof post.content === "string" && post.content.length <= 50000
     && typeof post.published === "boolean";
 }
 function corsOrigin(request, env) {
   const origin = request.headers.get("Origin") || "";
-  return origin === env.ADMIN_ORIGIN ? origin : "";
+  const allowed = String(env.ADMIN_ORIGIN || "").replace(/\/$/, "");
+  return origin === allowed ? origin : "";
 }
 async function githubRequest(path, token, options = {}) {
   const response = await fetch(API + path, {
@@ -131,7 +134,7 @@ export default {
         await env.AUTH_KV.put("session:" + sessionId, JSON.stringify({
           token:tokenData.access_token, login:user.login
         }), {expirationTtl:604800});
-        return Response.redirect(env.ADMIN_ORIGIN + ADMIN_PATH + "#session=" + sessionId, 302);
+        return Response.redirect(env.ADMIN_ORIGIN.replace(/\/$/, "") + ADMIN_PATH + "#session=" + sessionId, 302);
       }
 
       if (!origin) return json({error:"Origin not allowed."}, 403, "");
@@ -155,15 +158,21 @@ export default {
         let posts = Array.isArray(result.posts.posts) ? result.posts.posts : [];
         if (input.action === "save") {
           if (!validPost(input.post)) return json({error:"Check the post fields. Title, slug, date and content are required."}, 400, origin);
-          const index = posts.findIndex(post => post.slug === input.post.slug);
-          if (index >= 0) posts[index] = input.post;
+          const originalSlug = typeof input.originalSlug === "string" ? input.originalSlug : "";
+          const originalIndex = originalSlug ? posts.findIndex(post => post.slug === originalSlug) : -1;
+          const duplicateIndex = posts.findIndex(post => post.slug === input.post.slug);
+          if (originalSlug && originalIndex < 0) return json({error:"The original post was not found. Reload the list before saving."}, 404, origin);
+          if (duplicateIndex >= 0 && duplicateIndex !== originalIndex) return json({error:"Another post already uses this URL slug."}, 409, origin);
+          if (originalIndex >= 0) posts[originalIndex] = input.post;
           else {
             if (posts.length >= 100) return json({error:"The blog has reached its 100-post limit."}, 400, origin);
             posts.push(input.post);
           }
         } else if (input.action === "delete") {
           if (typeof input.slug !== "string") return json({error:"A post slug is required."}, 400, origin);
+          const before = posts.length;
           posts = posts.filter(post => post.slug !== input.slug);
+          if (posts.length === before) return json({error:"The post was not found."}, 404, origin);
         } else {
           return json({error:"Unknown action."}, 400, origin);
         }
