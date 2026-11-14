@@ -60,7 +60,8 @@
         <div><p class="admin-eyebrow">YOUR CONTENT</p><h2>Publications</h2><p id="admin-user" class="admin-muted"></p></div>
         <button class="btn" id="logout-button" type="button">Sign out</button>
       </div>
-      <div class="row-fluid admin-columns">
+      <div class="admin-section-tabs"><button type="button" class="btn btn-primary" id="show-posts-tab">Blog posts</button> <button type="button" class="btn" id="show-downloads-tab">Downloads library</button></div>
+      <div id="admin-posts-section"><div class="row-fluid admin-columns">
         <aside class="span4 admin-posts">
           <div class="admin-posts-heading"><strong>All posts</strong><button class="btn btn-small" id="new-post-button" type="button">＋ New post</button></div>
           <div id="admin-post-list" class="admin-post-list"><p class="post-empty">Loading publications…</p></div>
@@ -87,7 +88,26 @@
           </div>
           <p id="admin-message" class="admin-message" role="status" aria-live="polite"></p>
         </form>
-      </div>
+      </div></div>
+      <section id="admin-downloads-section" hidden>
+        <div class="admin-toolbar"><div><p class="admin-eyebrow">SOFTWARE LIBRARY</p><h2>Downloads</h2><p class="admin-muted">Publish apps and files to the public downloads page.</p></div><button class="btn btn-small" id="new-download-button" type="button">＋ New download</button></div>
+        <div class="row-fluid admin-columns">
+          <aside class="span4 admin-posts"><div class="admin-posts-heading"><strong>All downloads</strong></div><div id="admin-download-list" class="admin-post-list"><p class="post-empty">Loading downloads…</p></div></aside>
+          <form id="download-editor" class="span8 admin-editor">
+            <h3>Download editor</h3><input type="hidden" id="download-original-slug">
+            <label for="download-title">Application name</label><input class="input-block-level" id="download-title" maxlength="120" required placeholder="App name">
+            <div class="row-fluid"><div class="span7"><label for="download-slug">URL slug</label><input class="input-block-level" id="download-slug" maxlength="80" required pattern="[a-z0-9]+(?:-[a-z0-9]+)*" placeholder="app-name"></div><div class="span5"><label for="download-platform">Platform</label><select class="input-block-level" id="download-platform" required><option value="iOS">iOS</option><option value="Android">Android</option><option value="Other">Other</option></select></div></div>
+            <label for="download-description">Description</label><textarea class="input-block-level admin-textarea" id="download-description" rows="2" maxlength="500" required></textarea>
+            <label for="download-compatibility">Device / OS compatibility</label><input class="input-block-level" id="download-compatibility" maxlength="240" placeholder="e.g. iOS 6–9, iPhone 4 or newer">
+            <div class="row-fluid"><div class="span4"><label for="download-version">Version</label><input class="input-block-level" id="download-version" maxlength="40"></div><div class="span4"><label for="download-size">File size</label><input class="input-block-level" id="download-size" maxlength="40" placeholder="e.g. 12 MB"></div><div class="span4"><label for="download-type">File type</label><input class="input-block-level" id="download-type" maxlength="40" placeholder="IPA, APK, ZIP…"></div></div>
+            <label for="download-url">Download URL (HTTPS)</label><input class="input-block-level" id="download-url" type="url" maxlength="2000" required placeholder="https://…">
+            <label for="download-notes">Additional notes</label><textarea class="input-block-level admin-textarea" id="download-notes" rows="2" maxlength="1000"></textarea>
+            <label class="admin-publish"><input id="download-published" type="checkbox" checked> Publish this download</label>
+            <div class="admin-actions"><button class="btn btn-primary" id="save-download-button" type="submit">Save download</button><button class="btn" id="clear-download-button" type="button">Clear editor</button><button class="btn btn-danger" id="delete-download-button" type="button" hidden>Delete download</button></div>
+            <p id="download-message" class="admin-message" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
     </section>
   </div>
   <footer class="site-footer">
