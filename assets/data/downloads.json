@@ -1,3 +1,17 @@
 {
-  "downloads": []
+  "downloads": [
+    {
+      "slug": "google",
+      "title": "Google",
+      "platform": "iOS",
+      "description": "Google app.\nIPA for iOS 8\nWorks on newer versions of iOS\n2016 version.",
+      "compatibility": "iOS 8",
+      "version": "",
+      "fileSize": "32 MB",
+      "fileType": "IPA",
+      "url": "https://tbrlucas.github.io/downloads/files/google/com.google.GoogleMobile-15.0-iOS8.0--Clutch-2.0-RC8-.ipa",
+      "notes": "You will need Filza File Manager to perform the IPA installation.",
+      "published": true
+    }
+  ]
 }
