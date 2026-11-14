@@ -103,3 +103,34 @@ body { min-width:320px; padding-top:60px; }
   .translate-item { padding:6px 15px; }
   .translate-item .gt_selector { max-width:100%; }
 }
+
+
+/* Downloads library */
+.downloads-page { max-width:940px; }
+.downloads-heading { max-width:760px; margin-bottom:24px; }
+.downloads-heading .lead { font-size:17px; line-height:1.55; }
+.downloads-kicker { margin:0 0 5px; color:#777; font-size:11px; font-weight:bold; letter-spacing:1.4px; }
+.downloads-toolbar { display:flex; align-items:center; gap:12px; margin:20px 0 8px; padding:12px; background:#f5f5f5; border:1px solid #ddd; border-radius:4px; }
+.downloads-search { flex:1; }
+.downloads-toolbar input, .downloads-toolbar select { margin:0; }
+.downloads-count { margin:12px 2px; color:#777; font-size:12px; }
+.downloads-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+.download-card { display:flex; flex-direction:column; padding:18px; background:#fff; border:1px solid #ddd; border-radius:4px; box-shadow:0 1px 2px rgba(0,0,0,.05); }
+.download-card-top { display:flex; justify-content:space-between; gap:8px; margin-bottom:12px; color:#777; font-size:11px; }
+.download-platform { padding:3px 7px; color:#3a87ad; background:#d9edf7; border-radius:3px; font-weight:bold; }
+.download-card h2 { margin:0 0 9px; font-size:20px; line-height:1.25; }
+.download-description { min-height:44px; color:#555; line-height:1.5; }
+.download-meta { margin:8px 0; padding-top:9px; border-top:1px solid #eee; color:#666; font-size:12px; }
+.download-meta p { margin:3px 0; }
+.download-notes { padding:8px 10px; background:#f8f8f8; border-left:3px solid #ddd; color:#666; font-size:12px; }
+.download-button { align-self:flex-start; margin-top:auto; }
+.downloads-empty { margin-top:12px; text-align:center; }
+.downloads-note { margin-top:24px; color:#666; font-size:12px; }
+.admin-section-tabs { margin:18px 0 4px; padding-bottom:12px; border-bottom:1px solid #eee; }
+#download-editor h3 { margin-top:0; }
+@media (max-width:767px) {
+ .downloads-toolbar { display:block; }
+ .downloads-toolbar select { width:100%; margin-top:8px; }
+ .downloads-grid { grid-template-columns:1fr; }
+ .download-description { min-height:0; }
+}
