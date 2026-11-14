@@ -94,17 +94,23 @@
     }
     show(setup, false);
     if (!session) { loginMessage(""); show(login, true); show(app, false); return; }
+    let identity;
     try {
-      const identity = await api("/api/session");
-      loginMessage("");
-      show(login, false); show(app, true);
-      $("admin-user").textContent = `Signed in as @${identity.login}`;
-      await loadPosts();
+      identity = await api("/api/session");
     } catch (error) {
       sessionStorage.removeItem(sessionKey);
       session = "";
       show(login, true); show(app, false);
       loginMessage(error.message);
+      return;
+    }
+    loginMessage("");
+    show(login, false); show(app, true);
+    $("admin-user").textContent = `Signed in as @${identity.login}`;
+    try {
+      await loadPosts();
+    } catch (error) {
+      message("Could not load blog posts: " + error.message, true);
     }
   }
 
