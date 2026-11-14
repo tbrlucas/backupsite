@@ -224,7 +224,7 @@ export default {
           const before = downloads.length; downloads = downloads.filter(item => item.slug !== input.slug);
           if (downloads.length === before) return json({error:"The download was not found."},404,origin);
         } else return json({error:"Unknown action."},400,origin);
-        await writeDownloads(env,token,downloads,result.downloads.sha); return json({downloads},200,origin);
+        await writeDownloads(env,token,downloads,result.sha); return json({downloads},200,origin);
       }
       return json({error:"Not found."},404,origin);
     } catch (error) { return json({error:error.message || "Unexpected server error."},500,origin); }
