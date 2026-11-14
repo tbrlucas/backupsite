@@ -195,3 +195,7 @@ body { min-width:320px; padding-top:60px; }
  .admin-actions .btn { flex:1 1 auto; }
 }
 
+
+
+/* GitHub file upload control */
+.admin-upload-box{margin:18px 0;padding:16px;border:1px dashed #c8d4e2;border-radius:8px;background:#f7f9fc}.admin-upload-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.admin-upload-controls input[type=file]{max-width:100%}.admin-upload-box .admin-small{margin:8px 0 0;color:#6b7787}.admin-upload-box .admin-message{margin:8px 0 0}
