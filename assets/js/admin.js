@@ -312,5 +312,106 @@
     finally { $("delete-download-button").disabled = false; }
   });
 
+
+  let updates = [];
+  const updateMessage = (text, isError = false) => {
+    const target = $("update-message");
+    if (!target) return;
+    target.textContent = text;
+    target.className = isError ? "admin-message error" : "admin-message";
+  };
+  function renderUpdates() {
+    const target = $("admin-update-list");
+    if (!target) return;
+    if (!updates.length) { target.innerHTML = '<p class="post-empty">No updates yet. Create the first one.</p>'; return; }
+    target.innerHTML = updates.slice().sort((a,b) => (String(b.date)+String(b.time)).localeCompare(String(a.date)+String(a.time))).map(item =>
+      `<button class="admin-post-row" type="button" data-update-id="${escapeHtml(item.id)}"><strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.date)} · ${escapeHtml(item.category)} · ${item.published ? "Published" : "Draft"}</span></button>`
+    ).join("");
+    target.querySelectorAll("[data-update-id]").forEach(button => button.addEventListener("click", () => editUpdate(button.dataset.updateId)));
+  }
+  function clearUpdateEditor() {
+    $("update-editor").reset();
+    $("update-original-id").value = "";
+    $("update-date").value = localDate();
+    $("update-time").value = new Date().toTimeString().slice(0,5);
+    $("update-published").checked = true;
+    $("delete-update-button").hidden = true;
+    $("save-update-button").textContent = "Save update";
+    updateMessage("");
+  }
+  function editUpdate(id) {
+    const item = updates.find(entry => entry.id === id);
+    if (!item) return;
+    $("update-original-id").value = item.id;
+    $("update-title").value = item.title || "";
+    $("update-date").value = item.date || "";
+    $("update-time").value = item.time || "12:00";
+    $("update-category").value = item.category || "Website";
+    $("update-type").value = item.type || "Improvement";
+    $("update-summary").value = item.summary || "";
+    $("update-details").value = item.details || "";
+    $("update-published").checked = item.published === true;
+    $("delete-update-button").hidden = false;
+    $("save-update-button").textContent = "Update entry";
+    updateMessage("");
+    if (window.matchMedia("(max-width: 760px)").matches) $("update-editor").scrollIntoView({behavior:"smooth"});
+  }
+  async function loadUpdates() {
+    const data = await api("/api/whats-new");
+    updates = Array.isArray(data.updates) ? data.updates : [];
+    renderUpdates();
+  }
+  $("show-posts-tab").addEventListener("click", () => {
+    show($("admin-posts-section"), true); show($("admin-downloads-section"), false); show($("admin-whats-new-section"), false);
+    $("show-posts-tab").classList.add("btn-primary"); $("show-downloads-tab").classList.remove("btn-primary"); $("show-whats-new-tab").classList.remove("btn-primary");
+  });
+  $("show-downloads-tab").addEventListener("click", () => {
+    show($("admin-posts-section"), false); show($("admin-downloads-section"), true); show($("admin-whats-new-section"), false);
+    $("show-downloads-tab").classList.add("btn-primary"); $("show-posts-tab").classList.remove("btn-primary"); $("show-whats-new-tab").classList.remove("btn-primary");
+    if (!$("admin-download-list").dataset.loaded) {
+      loadDownloads().then(() => $("admin-download-list").dataset.loaded = "1").catch(error => downloadMessage(error.message, true));
+    }
+  });
+  $("show-whats-new-tab").addEventListener("click", () => {
+    show($("admin-posts-section"), false); show($("admin-downloads-section"), false); show($("admin-whats-new-section"), true);
+    $("show-whats-new-tab").classList.add("btn-primary"); $("show-posts-tab").classList.remove("btn-primary"); $("show-downloads-tab").classList.remove("btn-primary");
+    if (!$("admin-update-list").dataset.loaded) {
+      loadUpdates().then(() => $("admin-update-list").dataset.loaded = "1").catch(error => updateMessage(error.message, true));
+    }
+  });
+  $("new-update-button").addEventListener("click", clearUpdateEditor);
+  $("clear-update-button").addEventListener("click", clearUpdateEditor);
+  $("update-editor").addEventListener("submit", async event => {
+    event.preventDefault();
+    const item = {
+      id: $("update-original-id").value || (crypto.randomUUID ? crypto.randomUUID() : "update-" + Date.now()),
+      title: $("update-title").value.trim(), date: $("update-date").value, time: $("update-time").value,
+      category: $("update-category").value, type: $("update-type").value,
+      summary: $("update-summary").value.trim(), details: $("update-details").value.trim(),
+      published: $("update-published").checked
+    };
+    try {
+      $("save-update-button").disabled = true; updateMessage("Saving to GitHub…");
+      const data = await api("/api/whats-new", {method:"POST",body:JSON.stringify({action:"save",update:item})});
+      updates = data.updates; renderUpdates();
+      $("update-original-id").value = item.id;
+      $("delete-update-button").hidden = false; $("save-update-button").textContent = "Update entry";
+      $("admin-update-list").dataset.loaded = "1";
+      updateMessage("Saved and committed to GitHub.");
+    } catch (error) { updateMessage(error.message, true); }
+    finally { $("save-update-button").disabled = false; }
+  });
+  $("delete-update-button").addEventListener("click", async () => {
+    const id = $("update-original-id").value;
+    if (!id || !confirm("Delete this update? This change will be committed to GitHub.")) return;
+    try {
+      $("delete-update-button").disabled = true; updateMessage("Deleting from GitHub…");
+      const data = await api("/api/whats-new", {method:"POST",body:JSON.stringify({action:"delete",id})});
+      updates = data.updates; renderUpdates(); clearUpdateEditor();
+      updateMessage("Update deleted.");
+    } catch (error) { updateMessage(error.message, true); }
+    finally { $("delete-update-button").disabled = false; }
+  });
+
   boot();
 })();
