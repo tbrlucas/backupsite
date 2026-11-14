@@ -21,4 +21,12 @@
 
   const year = document.getElementById("year");
   if (year) year.textContent = String(now.getFullYear());
+
+  // Bootstrap 2 does not auto-initialize carousels from data-interval alone.
+  if (window.jQuery && window.jQuery.fn.carousel) {
+    const $carousel = window.jQuery("#deviceCarousel");
+    if ($carousel.length) {
+      $carousel.carousel({ interval: 6500, pause: "hover" });
+    }
+  }
 })();
