@@ -103,7 +103,7 @@ export default {
         const redirect = new URL("https://github.com/login/oauth/authorize");
         redirect.searchParams.set("client_id",env.GITHUB_OAUTH_CLIENT_ID);
         redirect.searchParams.set("redirect_uri",env.GITHUB_CALLBACK_URL);
-        redirect.searchParams.set("scope","read:user"); redirect.searchParams.set("state",state);
+        redirect.searchParams.set("state",state);
         return Response.redirect(redirect.toString(),302);
       }
       if (url.pathname === "/auth/callback" && request.method === "GET") {
