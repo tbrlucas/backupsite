@@ -86,3 +86,15 @@ body { min-width:320px; padding-top:60px; }
   .admin-toolbar { align-items:flex-start; }
   .admin-actions .btn { flex:1 1 auto; }
 }
+
+
+/* Translation control — styled like the Bootstrap 2 navigation. */
+.translate-item a { white-space:nowrap; }
+.google-translate-hidden {
+  position:absolute !important;
+  left:-10000px !important;
+  top:0 !important;
+  width:1px !important;
+  height:1px !important;
+  overflow:hidden !important;
+}
