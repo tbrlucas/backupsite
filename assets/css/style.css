@@ -966,3 +966,32 @@ body[data-theme="night"] .admin-post-row:hover { background: #46566b; }
   .admin-toolbar { align-items: flex-start; }
   .admin-actions .ios-button { flex: 1 1 auto; }
 }
+
+
+/* ==========================================================
+   Bootstrap 2.3.2 integration
+   Bootstrap provides the framework baseline; this file remains
+   the site's visual layer and keeps its 2012-inspired styling.
+   ========================================================== */
+.page.container {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.admin-editor .input-block-level {
+  display: block;
+  width: 100%;
+  min-height: 30px;
+}
+
+@media (max-width: 767px) {
+  .page.container {
+    width: min(calc(100% - 22px), var(--page-width));
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .admin-editor .input-block-level {
+    max-width: 100%;
+  }
+}
