@@ -13,17 +13,20 @@
 <body>
 <a class="skip-link" href="#main-content">Skip to content</a>
 <header class="site-header">
-  <div class="navbar">
+  <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
       <div class="container">
+        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse" aria-label="Toggle navigation">
+          <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+        </button>
         <a class="brand" href="/">tbrlucas</a>
-        <ul class="nav">
+        <div class="nav-collapse collapse"><ul class="nav">
           <li><a href="/">Home</a></li>
           <li><a href="https://tbrlucas.github.io/projects/">Projects</a></li>
           <li class="active"><a href="/blog/">Blog</a></li>
           <li><a href="/about/">About</a></li>
           
-        </ul>
+        </ul></div>
       </div>
     </div>
   </div>
@@ -36,4 +39,6 @@
 </main>
 <script src="../assets/js/main.js" defer></script>
 <script src="../assets/js/blog.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 </body></html>
