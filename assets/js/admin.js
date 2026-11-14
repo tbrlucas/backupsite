@@ -271,6 +271,7 @@
   $("download-title").addEventListener("input", () => {
     if (!$("download-original-slug").value) $("download-slug").value = slugify($("download-title").value);
   });
+  $("download-url").addEventListener("input", () => $("download-url").setCustomValidity(""));
   $("download-editor").addEventListener("submit", async event => {
     event.preventDefault();
     const item = {
@@ -281,6 +282,12 @@
       url:$("download-url").value.trim(), notes:$("download-notes").value.trim(),
       published:$("download-published").checked
     };
+    if (!item.url) {
+      $("download-url").setCustomValidity("Upload a file or paste an HTTPS link before saving.");
+      $("download-url").reportValidity();
+      return;
+    }
+    $("download-url").setCustomValidity("");
     try {
       $("save-download-button").disabled = true; downloadMessage("Saving to GitHub…");
       const originalSlug = $("download-original-slug").value.trim();
