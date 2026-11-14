@@ -3,29 +3,40 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#f5f7fa">
+<meta name="theme-color" content="#4f7fbf">
 <meta name="robots" content="noindex,nofollow">
 <meta name="referrer" content="no-referrer">
 <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap-responsive.min.css">
 <link rel="stylesheet" href="../assets/css/style.css">
-<link rel="stylesheet" href="../assets/css/admin.css?v=20261114-2">
 <title>Blog administration :: tbrlucas</title>
 </head>
-<body class="admin-body">
+<body>
 <a class="skip-link" href="#main-content">Skip to content</a>
-<header class="admin-topbar">
-  <div class="container">
-    <a class="admin-site-brand" href="/" aria-label="Back to tbrlucas homepage"><span class="admin-brand-mark">t</span><span>tbrlucas <small>CONTENT ADMINISTRATION</small></span></a>
-    <a class="admin-back-link" href="/">Back to website <span aria-hidden="true">↗</span></a>
+<header class="site-header">
+  <div class="navbar navbar-fixed-top">
+    <div class="navbar-inner"><div class="container">
+      <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse" aria-label="Toggle navigation">
+        <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+      </button>
+      <a class="brand" href="/">tbrlucas</a>
+      <div class="nav-collapse collapse">
+        <ul class="nav">
+          <li><a href="/">Home</a></li>
+          <li><a href="/projects/">Projects</a></li>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/about/">About</a></li>
+          <li class="active"><a href="/alcatelonetouch3075m/">Admin</a></li>
+        </ul>
+      </div>
+    </div></div>
   </div>
 </header>
-<main class="container admin-page" id="main-content">
-  <div class="admin-heading">
-    <div><p class="admin-eyebrow">CONTROL PANEL</p><h1>Blog administration</h1><p>Manage drafts and published articles.</p></div>
-    <span class="admin-private-label"><i></i> PRIVATE AREA</span>
-  </div>
+<main class="container page" id="main-content">
+  <h1>Blog administration</h1>
+  <p>Manage drafts and published articles.</p>
+  <hr>
   <div class="well admin-shell">
     <div id="admin-setup" class="admin-notice">
       <div class="admin-notice-icon" aria-hidden="true">⚙</div>
@@ -79,7 +90,10 @@
       </div>
     </section>
   </div>
-  <footer class="admin-footer"><span>tbrlucas · Blog tools</span><a href="/">Return to the public site</a></footer>
+  <footer class="site-footer">
+    <ul class="breadcrumb"><li><a href="/">Home</a></li><li class="active">Blog administration</li></ul>
+    <p><strong>tbrlucas</strong> · <a href="/">Return to the public site</a></p>
+  </footer>
 </main>
 <script src="../assets/js/main.js" defer></script>
 <script src="../assets/js/admin-config.js" defer></script>
