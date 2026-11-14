@@ -19,6 +19,8 @@
   const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
   })[char]);
+  const loginMessage = (text = "") => { const target = $("admin-login-message"); if (target) target.textContent = text; };
+  const localDate = () => { const date = new Date(); return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 10); };
   const slugify = (value) => value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 80);
 
@@ -53,7 +55,7 @@
   function clearEditor() {
     $("post-editor").reset();
     $("post-original-slug").value = "";
-    $("post-date").value = new Date().toISOString().slice(0,10);
+    $("post-date").value = localDate();
     $("post-published").checked = true;
     $("delete-post-button").hidden = true;
     $("save-post-button").textContent = "Save publication";
@@ -91,9 +93,10 @@
       return;
     }
     show(setup, false);
-    if (!session) { show(login, true); show(app, false); return; }
+    if (!session) { loginMessage(""); show(login, true); show(app, false); return; }
     try {
       const identity = await api("/api/session");
+      loginMessage("");
       show(login, false); show(app, true);
       $("admin-user").textContent = `Signed in as @${identity.login}`;
       await loadPosts();
@@ -101,7 +104,7 @@
       sessionStorage.removeItem(sessionKey);
       session = "";
       show(login, true); show(app, false);
-      message(error.message, true);
+      loginMessage(error.message);
     }
   }
 
@@ -114,6 +117,7 @@
   }
 
   $("login-button").addEventListener("click", () => {
+    loginMessage("");
     if (!apiBase) return;
     location.href = apiBase + "/auth/login";
   });
