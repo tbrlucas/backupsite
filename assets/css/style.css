@@ -213,3 +213,19 @@ body { min-width:320px; padding-top:60px; }
   white-space:nowrap !important;
   border:0 !important;
 }
+
+
+/* What's New timeline */
+.whats-new-page { max-width:900px; }
+.whats-new-intro { max-width:700px; margin-bottom:24px; color:#657386; line-height:1.6; }
+.whats-new-year { margin:28px 0 12px; color:#687586; font-size:12px; font-weight:bold; letter-spacing:1.2px; text-transform:uppercase; }
+.whats-new-list { display:grid; gap:13px; }
+.whats-new-entry { position:relative; padding:18px 20px; background:#fff; border:1px solid #e1e6ec; border-radius:6px; box-shadow:0 2px 7px rgba(30,55,80,.035); }
+.whats-new-entry-head { display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:9px; color:#778394; font-size:11px; }
+.whats-new-tag { display:inline-block; padding:3px 7px; color:#3a6f9e; background:#eaf3fa; border-radius:3px; font-weight:bold; }
+.whats-new-type { display:inline-block; padding:3px 7px; color:#687586; background:#f0f2f5; border-radius:3px; }
+.whats-new-entry h2 { margin:0 0 7px; font-size:20px; line-height:1.3; }
+.whats-new-entry p { margin:0; color:#586575; line-height:1.6; white-space:pre-line; }
+.whats-new-details { margin-top:10px !important; padding-top:10px; border-top:1px solid #edf0f3; }
+.whats-new-empty { padding:25px; color:#778394; text-align:center; background:#f7f9fb; border:1px dashed #d9e0e8; border-radius:6px; }
+@media (max-width:767px) { .whats-new-entry { padding:15px; } .whats-new-entry h2 { font-size:18px; } }
