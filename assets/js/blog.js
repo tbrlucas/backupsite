@@ -8,7 +8,7 @@
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
   })[char]);
 
-  fetch("/assets/data/posts.json")
+  fetch("/assets/data/posts.json?v=20261114-1", { cache: "no-store" })
     .then((response) => {
       if (!response.ok) throw new Error("Could not load the posts file.");
       return response.json();
