@@ -141,23 +141,17 @@
   </section>
 
   <hr>
-  <section class="section" id="blog" aria-labelledby="blog-title">
-    <div class="row">
-      <div class="span8">
-        <h2 id="blog-title">Blog posts</h2>
-        <p>Check out the newest blog posts!</p>
-        <div class="well post-list" id="home-post-list" aria-live="polite">
-          <p class="post-empty">New posts will appear here. Visit the <a href="/blog/">blog</a> to read all publications.</p>
-        </div>
+  <section class="section home-blog-section" id="blog" aria-labelledby="blog-title">
+    <div class="home-blog-heading">
+      <div>
+        <p class="blog-kicker">FROM THE BLOG</p>
+        <h2 id="blog-title">Latest posts</h2>
+        <p>Guides, notes and ideas from tbrlucas.</p>
       </div>
-      <div class="span4">
-        <div class="well blog-aside">
-          <h3>More to discover</h3>
-          <p>Browse the project pages for more work, or read the site information to learn what this project is about.</p>
-          <p><a href="/projects/">View projects</a></p>
-          <p><a href="/about/">About this site</a></p>
-        </div>
-      </div>
+      <a class="btn" href="/blog/">View all posts <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="home-blog-grid" id="home-post-list" aria-live="polite">
+      <p class="post-empty">Loading posts…</p>
     </div>
   </section>
 
@@ -174,7 +168,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 <script src="assets/js/main.js?v=20261115-1" defer></script>
-<script src="assets/js/blog.js" defer></script>
+<script src="assets/js/blog.js?v=20261115-blog" defer></script>
 <script>
 window.gtranslateSettings = {
   "default_language": "en",
