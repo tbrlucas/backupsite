@@ -1,10 +1,10 @@
 {
   "downloads": [
     {
-      "slug": "google",
       "title": "Google",
+      "slug": "google",
       "platform": "iOS",
-      "description": "Google app.\nIPA for iOS 8\nWorks on newer versions of iOS\n2016 version.",
+      "description": "Google app.\nIPA for iOS 8\nWorks on newer versions of iOS.\n2016 version.",
       "compatibility": "iOS 8",
       "version": "",
       "fileSize": "32 MB",
