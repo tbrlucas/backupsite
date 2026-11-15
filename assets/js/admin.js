@@ -95,15 +95,25 @@
       return;
     }
     show(setup, false);
-    if (!session) { loginMessage(""); show(login, true); show(app, false); return; }
+    if (!session) {
+      if (new URLSearchParams(location.search).get("login") === "1") {
+        loginMessage(""); show(login, true); show(app, false); return;
+      }
+      location.replace("/404.html");
+      return;
+    }
     let identity;
     try {
       identity = await api("/api/session");
     } catch (error) {
       sessionStorage.removeItem(sessionKey);
       session = "";
-      show(login, true); show(app, false);
-      loginMessage(error.message);
+      if (new URLSearchParams(location.search).get("login") === "1") {
+        show(login, true); show(app, false);
+        loginMessage(error.message);
+      } else {
+        location.replace("/404.html");
+      }
       return;
     }
     loginMessage("");
