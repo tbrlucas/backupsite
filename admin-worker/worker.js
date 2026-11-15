@@ -224,7 +224,7 @@ export default {
         const slug = String(form.get("slug") || "");
         if (!file || typeof file.arrayBuffer !== "function") return json({error:"Choose a file to upload."},400,origin);
         if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return json({error:"Enter a valid download name before uploading."},400,origin);
-        if (file.size < 1 || file.size > 40 * 1024 * 1024) return json({error:"Files must be between 1 byte and 40 MB."},413,origin);
+        if (file.size < 1 || file.size > 100 * 1024 * 1024) return json({error:"Files must be between 1 byte and 100 MB."},413,origin);
         const originalName = String(file.name || "download.bin").split(/[\\\\/]/).pop();
         const safeName = originalName.normalize("NFKD").replace(/[^a-zA-Z0-9._-]+/g,"-").replace(/^-+|-+$/g,"").slice(0,120) || "download.bin";
         const filePath = "downloads/files/" + slug + "/" + safeName;
