@@ -6,6 +6,7 @@
       "date": "2026-11-14",
       "excerpt": "The best store for downloading apps on your jailbroken iOS device.",
       "content": "Welcome to the first blog post on this page.\nToday, I’ll show you how to install AppDrop—the best store for those with a jailbroken Apple device.\n\nSo, let’s get started.\nOpen Cydia or Zebra, go to Sources, and tap the \"+\" icon.\nEnter the following source URL: https://adrienrl1.github.io/cydia/\n\nNote: If you are using a much older version of iOS, use http://adrienrl1.github.io/cydia/ instead.\n\nOnce that’s done, tap on the \"AdrienRL\" source, go to \"All Packages,\" and then select \"AppDrop.\"\nTap \"Modify\" > \"Install.\"\n\nAfter the installation is complete, the app will appear on your home screen.\n\nOPENING THE APP:\nWhen you open the app, you’ll be greeted by a home screen containing various folders filled with applications.\n\nIt uses archive.org to retrieve the .ipa files.\n\nMake sure you have Filza File Manager installed so you can view the downloaded IPA files.\n\nThanks for reading, and see you in the next post!",
+      "design": "default",
       "published": true
     },
     {
