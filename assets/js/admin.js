@@ -275,11 +275,12 @@
       }
       const base64 = parts.join("");
       const message = "Upload download file: " + safeName;
-      const payload = new Blob([
-        JSON.stringify({message, content:""}).slice(0,-2),
-        base64,
-        JSON.stringify({branch:"main", ...(existingSha ? {sha:existingSha} : {})}).slice(1)
-      ], {type:"application/json"});
+      const payload = JSON.stringify({
+        message,
+        content: base64,
+        branch: "main",
+        ...(existingSha ? {sha:existingSha} : {})
+      });
       $("download-upload-message").textContent = "Sending file directly to GitHub…";
       const response = await fetch(apiUrl, {method:"PUT", headers:{...authHeaders, "Content-Type":"application/json"}, body:payload});
       const result = await response.json().catch(() => ({}));
