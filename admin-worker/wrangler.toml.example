@@ -1,6 +1,6 @@
-name = "tbrlucas-blog-admin"
+name = "tbrlucas-backup-admin"
 main = "worker.js"
-compatibility_date = "2026-11-14"
+compatibility_date = "2026-11-15"
 
 [[kv_namespaces]]
 binding = "AUTH_KV"
@@ -13,5 +13,6 @@ GITHUB_OAUTH_CLIENT_ID = "REPLACE_WITH_GITHUB_APP_CLIENT_ID"
 GITHUB_CALLBACK_URL = "https://REPLACE-WORKER.REPLACE-SUBDOMAIN.workers.dev/auth/callback"
 ADMIN_GITHUB_LOGIN = "tbrlucas"
 ADMIN_ORIGIN = "https://tbrlucas.github.io"
+ADMIN_PATH = "/backupsite/alcatelonetouch3075m/"
 REPO_OWNER = "tbrlucas"
-REPO_NAME = "tbrlucas.github.io"
+REPO_NAME = "backupsite"
