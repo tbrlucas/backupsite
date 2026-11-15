@@ -248,7 +248,7 @@
       const filename = encodeURIComponent(file.name || "download.bin");
       const result = await api("/api/upload?slug=" + encodeURIComponent(slug), {
         method:"POST",
-        headers:{"Content-Type":"application/octet-stream","X-File-Name":filename},
+        headers:{"Content-Type":"application/octet-stream","X-File-Name":filename,"X-File-Size":String(file.size)},
         body:file
       });
       $("download-url").value = result.url;
