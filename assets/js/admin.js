@@ -296,6 +296,67 @@
     } finally { $("upload-download-file").disabled = false; }
   });
 
+  $("download-editor").addEventListener("submit", async event => {
+    event.preventDefault();
+    const item = {
+      title: $("download-title").value.trim(),
+      slug: $("download-slug").value.trim(),
+      platform: $("download-platform").value,
+      description: $("download-description").value.trim(),
+      compatibility: $("download-compatibility").value.trim(),
+      version: $("download-version").value.trim(),
+      fileSize: $("download-size").value.trim(),
+      fileType: $("download-type").value.trim(),
+      url: $("download-url").value.trim(),
+      notes: $("download-notes").value.trim(),
+      published: $("download-published").checked
+    };
+    const originalSlug = $("download-original-slug").value.trim();
+    try {
+      $("save-download-button").disabled = true;
+      downloadMessage("Saving to GitHub…");
+      const data = await api("/api/downloads", {
+        method: "POST",
+        body: JSON.stringify({action:"save", originalSlug, download:item})
+      });
+      downloads = data.downloads;
+      renderDownloads();
+      $("download-original-slug").value = item.slug;
+      $("delete-download-button").hidden = false;
+      $("save-download-button").textContent = "Update download";
+      $("admin-download-list").dataset.loaded = "1";
+      downloadMessage("Saved and committed to GitHub.");
+    } catch (error) {
+      downloadMessage(error.message, true);
+    } finally {
+      $("save-download-button").disabled = false;
+    }
+  });
+
+  $("delete-download-button").addEventListener("click", async () => {
+    const slug = $("download-original-slug").value.trim();
+    if (!slug || !confirm("Delete this download entry? The uploaded file in the repository will not be deleted.")) return;
+    try {
+      $("delete-download-button").disabled = true;
+      downloadMessage("Deleting from GitHub…");
+      const data = await api("/api/downloads", {
+        method: "POST",
+        body: JSON.stringify({action:"delete", slug})
+      });
+      downloads = data.downloads;
+      renderDownloads();
+      clearDownloadEditor();
+      $("admin-download-list").dataset.loaded = "1";
+      downloadMessage("Download entry deleted.");
+    } catch (error) {
+      downloadMessage(error.message, true);
+    } finally {
+      $("delete-download-button").disabled = false;
+    }
+  });
+
+  $("clear-download-button").addEventListener("click", clearDownloadEditor);
+
   let updates = [];
   const updateMessage = (text, isError = false) => {
     const target = $("update-message");
