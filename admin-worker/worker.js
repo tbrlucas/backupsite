@@ -177,6 +177,10 @@ export default {
       const session = await getSession(request,env);
       if (!session) return json({error:"Please sign in again."},401,origin);
       if (url.pathname === "/api/session" && request.method === "GET") return json({login:session.login},200,origin);
+      if (url.pathname === "/api/upload-token" && request.method === "GET") {
+        const token = await installationToken(env);
+        return json({token, expiresIn:3300, owner:env.REPO_OWNER, repo:env.REPO_NAME},200,origin);
+      }
       if (url.pathname === "/api/logout" && request.method === "POST") { await env.AUTH_KV.delete("session:" + session.id); return json({ok:true},200,origin); }
       if (url.pathname === "/api/posts" && (request.method === "GET" || request.method === "POST")) {
         const token = await installationToken(env);
