@@ -10,6 +10,17 @@
       "summary": "new apps",
       "details": "New apps posted!\nCheck https://tbrlucas.github.io/downloads/ to see new apps.\nThey were first posted for iOS, later published for Android...",
       "published": true
+    },
+    {
+      "id": "6171e6e7-ede0-4f12-a37d-b54dd75da8ba",
+      "title": "Blog Themes Expanded with Default Theme Support",
+      "date": "2026-11-14",
+      "time": "21:51",
+      "category": "Blog",
+      "type": "Improvement",
+      "summary": "The blog now includes a default theme based on the website's original design, alongside the three special article themes: iOS 6, Android Market (2012), and Dark 2010s.",
+      "details": "- Added the Default theme to the article design selector.\n- New blog posts use the Default theme automatically.\n- Older posts without a selected design also keep the original website styling.\n- The iOS 6, Android Market (2012), and Dark 2010s themes remain available.\n- Themes only affect individual blog articles and do not change the rest of the website.",
+      "published": true
     }
   ]
 }
