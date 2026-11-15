@@ -194,7 +194,7 @@ export default {
     const url = new URL(request.url); const origin = corsOrigin(request,env);
     if (request.method === "OPTIONS") {
       if (!origin) return new Response(null,{status:403});
-      return new Response(null,{status:204,headers:{"Access-Control-Allow-Origin":origin,"Access-Control-Allow-Methods":"GET, POST, OPTIONS","Access-Control-Allow-Headers":"Authorization, Content-Type, X-File-Name","Access-Control-Max-Age":"86400","Vary":"Origin"}});
+      return new Response(null,{status:204,headers:{"Access-Control-Allow-Origin":origin,"Access-Control-Allow-Methods":"GET, POST, OPTIONS","Access-Control-Allow-Headers":"Authorization, Content-Type, X-File-Name, X-File-Size","Access-Control-Max-Age":"86400","Vary":"Origin"}});
     }
     try {
       if (url.pathname === "/auth/login" && request.method === "GET") {
