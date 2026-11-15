@@ -1,6 +1,7 @@
 (() => {
   const config = window.TBRLUCAS_ADMIN_CONFIG || {};
   const apiBase = String(config.apiBase || "").replace(/\/$/, "");
+  const siteBase = new URL("../../", location.href).pathname;
   const $ = (id) => document.getElementById(id);
   const setup = $("admin-setup");
   const login = $("admin-login");
@@ -112,7 +113,7 @@
         show(login, true); show(app, false);
         loginMessage(error.message);
       } else {
-        location.replace("/404.html");
+        location.replace(siteBase + "404.html");
       }
       return;
     }
