@@ -64,7 +64,7 @@
 
   const cardMarkup = (post) => {
     const theme = post.design || "default";
-    const themeLabels = {"default":"Default theme","ios-6":"iOS 6 edition","android-market-2012":"Android Market 2012 edition","dark-2010s":"Dark 2010s edition","aero":"Aero special edition"};
+    const themeLabels = {"default":"Default theme","ios-6":"iOS 6 edition","android-market-2012":"Android Market 2012 edition","dark-2010s":"Dark 2010s edition","aero":"Aero special edition","cydia-classic":"Cydia Classic edition"};
     return `
       <article class="blog-card blog-card-${escapeHtml(theme)}">
         <div class="blog-card-meta"><span>${formatDate(post.date)}</span><span>${escapeHtml(themeLabels[theme] || "Blog post")}</span></div>
@@ -178,6 +178,33 @@
               <footer class="aero-window-footer"><span>tbrlucas</span><span>DESIGNED WITH AERO GLASS</span></footer>
             </section>
             <footer class="aero-page-footer"><a href="/">tbrlucas home</a><span>Independent technology journal</span></footer>`;
+        } else if (theme === "cydia-classic") {
+          document.body.classList.add("cydia-classic-page");
+          article.className = "cydia-article-shell";
+          article.innerHTML = `
+            <header class="cydia-topbar">
+              <a class="cydia-brand" href="/"><span class="cydia-mark">C</span><span><strong>Cydia</strong><small>tbrlucas blog edition</small></span></a>
+              <a class="cydia-index-link" href="/blog/">All articles</a>
+            </header>
+            <nav class="cydia-tabs" aria-label="Article sections"><span class="active">ARTICLE</span><span>DISCOVER</span><span>COMMUNITY</span></nav>
+            <div class="cydia-breadcrumb"><a href="/">Home</a><span>›</span><a href="/blog/">Blog</a><span>›</span><span>Article</span></div>
+            <section class="cydia-app-panel">
+              <header class="cydia-app-heading">
+                <div class="cydia-app-icon" aria-hidden="true"><span>t</span></div>
+                <div><p class="cydia-eyebrow">TBRLUCAS BLOG · CYDIA CLASSIC</p><h1>${escapeHtml(post.title || "Untitled")}</h1><p class="cydia-excerpt">${escapeHtml(post.excerpt || "")}</p><div class="cydia-meta"><span>${formatDate(post.date)}</span><span>EDITORIAL</span><span>iOS & IPAD</span></div></div>
+              </header>
+              <div class="cydia-toolbar"><span>PACKAGE DETAILS</span><span class="cydia-toolbar-status">ARTICLE VIEW</span></div>
+              <div class="cydia-content-layout">
+                <div class="cydia-article-content">${content}</div>
+                <aside class="cydia-sidebar">
+                  <div class="cydia-info-panel"><h2>ABOUT THIS ARTICLE</h2><p>${escapeHtml(post.excerpt || "An article from the tbrlucas blog.")}</p><div><span>CATEGORY</span><strong>Technology</strong></div><div><span>EDITION</span><strong>Cydia Classic</strong></div></div>
+                  <div class="cydia-note"><strong>From the archive</strong><p>Exploring the software, ideas and communities that shaped mobile technology.</p></div>
+                  <a class="cydia-back-link" href="/blog/">‹ Back to all articles</a>
+                </aside>
+              </div>
+              <footer class="cydia-card-footer"><span>tbrlucas</span><span>INSPIRED BY CLASSIC CYDIA</span></footer>
+            </section>
+            <footer class="cydia-page-footer"><a href="/">tbrlucas home</a><span>Independent technology journal</span></footer>`;
         } else if (theme === "ios-6") {
           document.body.classList.add("ios6-blog-page");
           article.className = "ios6-article-shell";
