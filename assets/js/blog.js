@@ -63,8 +63,8 @@
   };
 
   const cardMarkup = (post) => {
-    const theme = post.design || "ios-6";
-    const themeLabels = {"ios-6":"iOS 6 edition","android-market-2012":"Android Market 2012 edition","dark-2010s":"Dark 2010s edition"};
+    const theme = post.design || "default";
+    const themeLabels = {"default":"Default theme","ios-6":"iOS 6 edition","android-market-2012":"Android Market 2012 edition","dark-2010s":"Dark 2010s edition"};
     return `
       <article class="blog-card blog-card-${escapeHtml(theme)}">
         <div class="blog-card-meta"><span>${formatDate(post.date)}</span><span>${escapeHtml(themeLabels[theme] || "Blog post")}</span></div>
@@ -107,7 +107,7 @@
         }
 
         const content = renderContent(post.content);
-        const theme = post.design || "ios-6";
+        const theme = post.design || "default";
         if (theme === "android-market-2012") {
           document.body.classList.add("android-market-page");
           article.className = "market-article-shell";
