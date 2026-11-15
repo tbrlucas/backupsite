@@ -1,11 +1,9 @@
 (() => {
-  const featured = document.getElementById("blog-featured");
-  const archive = document.getElementById("blog-archive");
-  const archiveSection = document.getElementById("older-posts-section");
+  const postList = document.getElementById("blog-post-list");
   const count = document.getElementById("blog-post-count");
   const article = document.getElementById("post-content");
   const homeList = document.getElementById("home-post-list");
-  if (!featured && !archive && !article && !homeList) return;
+  if (!postList && !article && !homeList) return;
 
   const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
@@ -17,39 +15,34 @@
       .toLocaleDateString("en-US", {month:"short", day:"numeric", year:"numeric", timeZone:"UTC"});
   };
   const postUrl = (post) => "/blog/post.html?slug=" + encodeURIComponent(post.slug || "");
-  const cardMarkup = (post, featuredCard = false) => `
-    <article class="blog-card${featuredCard ? " blog-card-featured" : ""}">
-      <div class="blog-card-meta"><span>${formatDate(post.date)}</span><span>Article</span></div>
+  const cardMarkup = (post) => `
+    <article class="blog-card">
+      <div class="blog-card-meta"><span>${formatDate(post.date)}</span><span>Blog post</span></div>
       <h3><a href="${postUrl(post)}">${escapeHtml(post.title || "Untitled")}</a></h3>
       <p>${escapeHtml(post.excerpt || "")}</p>
-      <a class="blog-read-link" href="${postUrl(post)}">Read article <span aria-hidden="true">→</span></a>
+      <a class="blog-read-link" href="${postUrl(post)}">Read more <span aria-hidden="true">→</span></a>
     </article>`;
 
-  fetch("/assets/data/posts.json?v=20261115-1", { cache: "no-store" })
+  fetch("/assets/data/posts.json?v=20261115-cards", { cache: "no-store" })
     .then((response) => {
       if (!response.ok) throw new Error("Could not load the posts file.");
       return response.json();
     })
     .then((data) => {
       const posts = (Array.isArray(data.posts) ? data.posts : [])
-        .filter((post) => post.published !== false)
+        .filter((post) => post.published === true)
         .sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
 
       if (count) count.textContent = posts.length + (posts.length === 1 ? " published post" : " published posts");
-      if (featured) {
-        featured.innerHTML = posts.length
-          ? cardMarkup(posts[0], true)
+      if (postList) {
+        postList.innerHTML = posts.length
+          ? posts.map(cardMarkup).join("")
           : '<p class="post-empty">There are no published posts yet. Check back soon!</p>';
-      }
-      if (archive && archiveSection) {
-        const older = posts.slice(1);
-        archiveSection.hidden = older.length === 0;
-        archive.innerHTML = older.map((post) => cardMarkup(post)).join("");
       }
       if (homeList) {
         const latest = posts.slice(0, 3);
         homeList.innerHTML = latest.length
-          ? latest.map((post) => cardMarkup(post)).join("")
+          ? latest.map(cardMarkup).join("")
           : '<p class="post-empty">There are no published posts yet. Check back soon!</p>';
       }
 
@@ -67,8 +60,7 @@
     })
     .catch(() => {
       const message = '<p class="post-empty">Posts are temporarily unavailable.</p>';
-      if (featured) featured.innerHTML = message;
-      if (archive) archive.innerHTML = "";
+      if (postList) postList.innerHTML = message;
       if (count) count.textContent = "Posts unavailable";
       if (article) article.innerHTML = message;
       if (homeList) homeList.innerHTML = message;
