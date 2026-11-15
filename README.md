@@ -61,13 +61,13 @@ Some sections use JSON files to keep content separate from page markup.
 
 Content entries generally include a title, URL slug, description, and publication status. Entries marked as unpublished are intended to remain out of the public-facing listings.
 
-## Experimental test page
+## Website deletion procedure
 
-The `/alcatelonetouch3075m/` route is an experimental test page.
+The `/alcatelonetouch3075m/` page is a restricted administrative test interface used to validate the website termination confirmation process.
 
-It may display a dramatic confirmation asking whether you want to delete the website. The **YES** button is part of a joke: it does not delete the website, its repository, or any files.
+The page presents a final confirmation prompt before proceeding with the permanent deletion of the TBRLucas website. Selecting **YES** is designated as the confirmation action for this operation.
 
-Nothing is being deleted. Please do not panic.
+This interface is isolated from the public website and is not part of the regular content-management workflow.
 
 ## Administration
 
