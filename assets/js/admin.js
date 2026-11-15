@@ -312,6 +312,13 @@
       published: $("download-published").checked
     };
     const originalSlug = $("download-original-slug").value.trim();
+    if (!item.title) { downloadMessage("Enter the application name.", true); $("download-title").focus(); return; }
+    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(item.slug)) { downloadMessage("Enter a valid URL slug using lowercase letters, numbers and hyphens.", true); $("download-slug").focus(); return; }
+    if (!item.description) { downloadMessage("Add a short description before saving.", true); $("download-description").focus(); return; }
+    if (!/^https:\/\//i.test(item.url)) { downloadMessage("Add an HTTPS download URL. Upload the file first or paste a secure link.", true); $("download-url").focus(); return; }
+    if (item.title.length > 120 || item.description.length > 500 || item.compatibility.length > 240 || item.version.length > 40 || item.fileSize.length > 40 || item.fileType.length > 40 || item.url.length > 2000 || item.notes.length > 1000) {
+      downloadMessage("One or more fields exceed their allowed length. Shorten the highlighted information and try again.", true); return;
+    }
     try {
       $("save-download-button").disabled = true;
       downloadMessage("Saving to GitHub…");
@@ -355,6 +362,13 @@
     }
   });
 
+  $("download-title").addEventListener("input", () => {
+    if (!$("download-original-slug").value) $("download-slug").value = slugify($("download-title").value);
+  });
+  $("download-slug").addEventListener("blur", () => {
+    const value = $("download-slug").value.trim();
+    if (value) $("download-slug").value = slugify(value);
+  });
   $("clear-download-button").addEventListener("click", clearDownloadEditor);
 
   let updates = [];
