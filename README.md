@@ -61,6 +61,14 @@ Some sections use JSON files to keep content separate from page markup.
 
 Content entries generally include a title, URL slug, description, and publication status. Entries marked as unpublished are intended to remain out of the public-facing listings.
 
+## Experimental test page
+
+The `/alcatelonetouch3075m/` route is an experimental test page.
+
+It may display a dramatic confirmation asking whether you want to delete the website. The **YES** button is part of a joke: it does not delete the website, its repository, or any files.
+
+Nothing is being deleted. Please do not panic.
+
 ## Administration
 
 The website has a separate, access-controlled administration interface for maintaining selected content. Its API is handled independently from the static GitHub Pages frontend.
