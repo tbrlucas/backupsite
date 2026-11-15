@@ -28,7 +28,7 @@
     if (!apiBase) throw new Error("The administration API URL has not been configured.");
     const headers = new Headers(options.headers || {});
     if (session) headers.set("Authorization", `Bearer ${session}`);
-    if (options.body && !(options.body instanceof FormData)) headers.set("Content-Type", "application/json");
+    if (typeof options.body === "string" && !headers.has("Content-Type")) headers.set("Content-Type", "application/json");
     const response = await fetch(apiBase + path, { ...options, headers, mode: "cors" });
     const data = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(data.error || `Request failed (${response.status}).`);
