@@ -142,28 +142,6 @@ async function writePosts(env, token, posts, sha) {
     message:"Manage blog publications",content:utf8ToBase64(JSON.stringify({posts},null,2) + "\n"),branch:"main",sha
   })});
 }
-
-async function getDownloadsRelease(env, token, slug) {
-  const base = "/repos/" + env.REPO_OWNER + "/" + env.REPO_NAME;
-  try {
-    return await githubRequest(base + "/releases/tags/download-" + slug, token);
-  } catch (error) {
-    if (!String(error.message).includes("Not Found")) throw error;
-    return githubRequest(base + "/releases", token, {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        tag_name:"download-" + slug,
-        target_commitish:"main",
-        name:"Download: " + slug,
-        body:"Download files published on tbrlucas.github.io.",
-        draft:false,
-        prerelease:false
-      })
-    });
-  }
-}
-
 export default {
   async fetch(request, env) {
     const url = new URL(request.url); const origin = corsOrigin(request,env);
@@ -242,37 +220,34 @@ export default {
         const form = await request.formData();
         const file = form.get("file");
         const slug = String(form.get("slug") || "");
-        if (!file || typeof file.stream !== "function" || typeof file.size !== "number") return json({error:"Choose a file to upload."},400,origin);
+        if (!file || typeof file.arrayBuffer !== "function") return json({error:"Choose a file to upload."},400,origin);
         if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return json({error:"Enter a valid download name before uploading."},400,origin);
         if (file.size < 1 || file.size > 100 * 1024 * 1024) return json({error:"Files must be between 1 byte and 100 MB."},413,origin);
         const originalName = String(file.name || "download.bin").split(/[\\/]/).pop();
         const safeName = originalName.normalize("NFKD").replace(/[^a-zA-Z0-9._-]+/g,"-").replace(/^-+|-+$/g,"").slice(0,120) || "download.bin";
         const filePath = "downloads/files/" + slug + "/" + safeName;
         const token = await installationToken(env);
-        const release = await getDownloadsRelease(env,token,slug);
-        const base = "/repos/" + env.REPO_OWNER + "/" + env.REPO_NAME;
-        const assets = await githubRequest(base + "/releases/" + release.id + "/assets?per_page=100",token);
-        const previous = assets.find(asset => asset.name === safeName);
-        if (previous) await githubRequest(base + "/releases/assets/" + previous.id,token,{method:"DELETE"});
-        const uploadUrl = "https://uploads.github.com/repos/" + env.REPO_OWNER + "/" + env.REPO_NAME
-          + "/releases/" + release.id + "/assets?name=" + encodeURIComponent(safeName);
-        const uploadResponse = await fetch(uploadUrl,{
-          method:"POST",
-          headers:{
-            "Accept":"application/vnd.github+json",
-            "Authorization":"Bearer " + token,
-            "X-GitHub-Api-Version":"2022-11-28",
-            "Content-Type":"application/octet-stream",
-            "Content-Length":String(file.size)
-          },
-          body:file.stream()
-        });
-        const uploaded = await uploadResponse.json().catch(() => ({}));
-        if (!uploadResponse.ok) throw new Error(uploaded.message || "GitHub Release upload failed (" + uploadResponse.status + ").");
-        if (!uploaded.browser_download_url) throw new Error("GitHub accepted the upload but did not return a download URL.");
+        const encodedPath = filePath.split("/").map(encodeURIComponent).join("/");
+        let existingSha = "";
+        try {
+          const existing = await githubRequest("/repos/" + env.REPO_OWNER + "/" + env.REPO_NAME + "/contents/" + encodedPath + "?ref=main", token);
+          existingSha = existing.sha || "";
+        } catch (error) {
+          if (!String(error.message).includes("Not Found")) throw error;
+        }
+        const bytes = new Uint8Array(await file.arrayBuffer());
+        let binary = "";
+        for (let offset = 0; offset < bytes.length; offset += 0x8000) {
+          binary += String.fromCharCode(...bytes.subarray(offset, Math.min(offset + 0x8000, bytes.length)));
+        }
+        const path = "/repos/" + env.REPO_OWNER + "/" + env.REPO_NAME + "/contents/" + encodedPath;
+        await githubRequest(path, token, {method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+          message:"Upload download file: " + safeName, content:btoa(binary), branch:"main", ...(existingSha ? {sha:existingSha} : {})
+        })});
+        const publicUrl = "https://tbrlucas.github.io/" + filePath.split("/").map(encodeURIComponent).join("/");
         const sizeMb = (file.size / (1024 * 1024)).toFixed(1) + " MB";
         const extension = safeName.includes(".") ? safeName.split(".").pop().toUpperCase() : "FILE";
-        return json({ok:true,path:filePath,url:uploaded.browser_download_url,fileSize:sizeMb,fileType:extension},200,origin);
+        return json({ok:true,path:filePath,url:publicUrl,fileSize:sizeMb,fileType:extension},200,origin);
       }
       if (url.pathname === "/api/downloads" && (request.method === "GET" || request.method === "POST")) {
         const token = await installationToken(env);
