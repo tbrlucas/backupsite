@@ -239,7 +239,7 @@
     const fileInput = $("download-file");
     const file = fileInput.files && fileInput.files[0];
     if (!file) { $("download-upload-message").textContent = "Choose a file first."; return; }
-    if (file.size > 40 * 1024 * 1024) { $("download-upload-message").textContent = "This file is larger than the 40 MB limit."; return; }
+    if (file.size > 100 * 1024 * 1024) { $("download-upload-message").textContent = "This file is larger than the 100 MB limit."; return; }
     const slug = $("download-slug").value.trim() || slugify($("download-title").value);
     if (!slug) { $("download-upload-message").textContent = "Enter the application name first."; return; }
     $("download-upload-message").textContent = "Uploading file to GitHub…";
