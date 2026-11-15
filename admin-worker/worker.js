@@ -94,51 +94,6 @@ async function githubRequest(path, token, options = {}) {
   return data;
 }
 
-async function* base64Stream(source) {
-  const reader = source.getReader();
-  let carry = new Uint8Array(0);
-  try {
-    while (true) {
-      const {value, done} = await reader.read();
-      if (done) break;
-      const chunk = new Uint8Array(carry.length + value.length);
-      chunk.set(carry); chunk.set(value, carry.length);
-      const usable = chunk.length - (chunk.length % 3);
-      if (usable) {
-        let binary = "";
-        for (let i = 0; i < usable; i += 0x7ffe) {
-          binary += String.fromCharCode(...chunk.subarray(i, Math.min(i + 0x7ffe, usable)));
-        }
-        yield btoa(binary);
-      }
-      carry = chunk.slice(usable);
-    }
-    if (carry.length) {
-      let binary = "";
-      for (const byte of carry) binary += String.fromCharCode(byte);
-      yield btoa(binary);
-    }
-  } finally {
-    reader.releaseLock();
-  }
-}
-function streamedJsonBody(source, prefix, suffix) {
-  const iterator = (async function* () {
-    yield new TextEncoder().encode(prefix);
-    for await (const part of base64Stream(source)) yield new TextEncoder().encode(part);
-    yield new TextEncoder().encode(suffix);
-  })();
-  return new ReadableStream({
-    async pull(controller) {
-      try {
-        const next = await iterator.next();
-        if (next.done) controller.close();
-        else controller.enqueue(next.value);
-      } catch (error) { controller.error(error); }
-    },
-    async cancel() { await iterator.return(); }
-  });
-}
 
 async function appJwt(env) {
   const now = Math.floor(Date.now()/1000);
@@ -264,12 +219,13 @@ export default {
         await writeWhatsNew(env,token,updates,result.sha); return json({updates},200,origin);
       }
       if (url.pathname === "/api/upload" && request.method === "POST") {
-        const slug = url.searchParams.get("slug") || "";
-        const originalName = decodeURIComponent(request.headers.get("X-File-Name") || "download.bin").split(/[\\\\/]/).pop();
-        const size = Number(request.headers.get("X-File-Size") || 0);
-        if (!request.body) return json({error:"Choose a file to upload."},400,origin);
+        const form = await request.formData();
+        const file = form.get("file");
+        const slug = String(form.get("slug") || "");
+        if (!file || typeof file.arrayBuffer !== "function") return json({error:"Choose a file to upload."},400,origin);
         if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return json({error:"Enter a valid download name before uploading."},400,origin);
-        if (size < 1 || size > 100 * 1024 * 1024) return json({error:"Files must be between 1 byte and 100 MB."},413,origin);
+        if (file.size < 1 || file.size > 40 * 1024 * 1024) return json({error:"Files must be between 1 byte and 40 MB."},413,origin);
+        const originalName = String(file.name || "download.bin").split(/[\\\\/]/).pop();
         const safeName = originalName.normalize("NFKD").replace(/[^a-zA-Z0-9._-]+/g,"-").replace(/^-+|-+$/g,"").slice(0,120) || "download.bin";
         const filePath = "downloads/files/" + slug + "/" + safeName;
         const token = await installationToken(env);
@@ -281,27 +237,17 @@ export default {
         } catch (error) {
           if (!String(error.message).includes("Not Found")) throw error;
         }
+        const bytes = new Uint8Array(await file.arrayBuffer());
+        let binary = "";
+        for (let offset = 0; offset < bytes.length; offset += 0x8000) {
+          binary += String.fromCharCode(...bytes.subarray(offset, Math.min(offset + 0x8000, bytes.length)));
+        }
         const path = "/repos/" + env.REPO_OWNER + "/" + env.REPO_NAME + "/contents/" + encodedPath;
-        const prefix = JSON.stringify({message:"Upload download file: " + safeName, content:""}).slice(0,-2);
-        const suffix = '","branch":"main"' + (existingSha ? ',"sha":' + JSON.stringify(existingSha) : '') + '}';
-        const encodedLength = 4 * Math.ceil(size / 3);
-        const body = streamedJsonBody(request.body, prefix, suffix);
-        const response = await fetch(API + path, {
-          method:"PUT",
-          headers:{
-            "Accept":"application/vnd.github+json",
-            "Authorization":"Bearer " + token,
-            "X-GitHub-Api-Version":"2022-11-28",
-            "User-Agent":"tbrlucas-blog-admin",
-            "Content-Type":"application/json",
-            "Content-Length":String(new TextEncoder().encode(prefix).length + encodedLength + new TextEncoder().encode(suffix).length)
-          },
-          body
-        });
-        const result = await response.json().catch(() => ({}));
-        if (!response.ok) throw new Error(result.message || "GitHub upload failed (" + response.status + ").");
+        await githubRequest(path, token, {method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+          message:"Upload download file: " + safeName, content:btoa(binary), branch:"main", ...(existingSha ? {sha:existingSha} : {})
+        })});
         const publicUrl = "https://tbrlucas.github.io/" + filePath.split("/").map(encodeURIComponent).join("/");
-        const sizeMb = (size / (1024 * 1024)).toFixed(1) + " MB";
+        const sizeMb = (file.size / (1024 * 1024)).toFixed(1) + " MB";
         const extension = safeName.includes(".") ? safeName.split(".").pop().toUpperCase() : "FILE";
         return json({ok:true,path:filePath,url:publicUrl,fileSize:sizeMb,fileType:extension},200,origin);
       }
