@@ -99,7 +99,7 @@
       if (new URLSearchParams(location.search).get("login") === "1") {
         loginMessage(""); show(login, true); show(app, false); return;
       }
-      location.replace("/404.html");
+      location.replace(siteBase + "404.html");
       return;
     }
     let identity;
@@ -300,7 +300,7 @@
       const response = await fetch(apiUrl, {method:"PUT", headers:{...authHeaders, "Content-Type":"application/json"}, body:payload});
       const result = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(result.message || "GitHub rejected the upload (" + response.status + ").");
-      const publicUrl = "https://tbrlucas.github.io/" + filePath.split("/").map(encodeURIComponent).join("/");
+      const publicUrl = location.origin + siteBase + filePath.split("/").map(encodeURIComponent).join("/");
       $("download-url").value = publicUrl;
       $("download-size").value = (file.size / (1024 * 1024)).toFixed(1) + " MB";
       $("download-type").value = safeName.includes(".") ? safeName.split(".").pop().toUpperCase() : "FILE";
