@@ -1,5 +1,4 @@
 const API = "https://api.github.com";
-const ADMIN_PATH = "/alcatelonetouch3075m/";
 const POSTS_PATH = "assets/data/posts.json";
 const DOWNLOADS_PATH = "assets/data/downloads.json";
 const WHATS_NEW_PATH = "assets/data/whats-new.json";
