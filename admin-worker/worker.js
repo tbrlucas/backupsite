@@ -8,7 +8,7 @@ function json(data, status = 200, origin = "") {
   return new Response(JSON.stringify(data), {status, headers:{
     "Content-Type":"application/json; charset=utf-8", "Cache-Control":"no-store",
     "Access-Control-Allow-Origin":origin, "Access-Control-Allow-Methods":"GET, POST, OPTIONS",
-    "Access-Control-Allow-Headers":"Authorization, Content-Type, X-File-Name", "Vary":"Origin"
+    "Access-Control-Allow-Headers":"Authorization, Content-Type, X-File-Name, X-File-Size", "Vary":"Origin"
   }});
 }
 function randomToken(bytes = 32) {
@@ -106,8 +106,8 @@ async function* base64Stream(source) {
       const usable = chunk.length - (chunk.length % 3);
       if (usable) {
         let binary = "";
-        for (let i = 0; i < usable; i += 0x8000) {
-          binary += String.fromCharCode(...chunk.subarray(i, Math.min(i + 0x8000, usable)));
+        for (let i = 0; i < usable; i += 0x7ffe) {
+          binary += String.fromCharCode(...chunk.subarray(i, Math.min(i + 0x7ffe, usable)));
         }
         yield btoa(binary);
       }
@@ -266,7 +266,7 @@ export default {
       if (url.pathname === "/api/upload" && request.method === "POST") {
         const slug = url.searchParams.get("slug") || "";
         const originalName = decodeURIComponent(request.headers.get("X-File-Name") || "download.bin").split(/[\\\\/]/).pop();
-        const size = Number(request.headers.get("Content-Length") || 0);
+        const size = Number(request.headers.get("X-File-Size") || 0);
         if (!request.body) return json({error:"Choose a file to upload."},400,origin);
         if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return json({error:"Enter a valid download name before uploading."},400,origin);
         if (size < 1 || size > 100 * 1024 * 1024) return json({error:"Files must be between 1 byte and 100 MB."},413,origin);
