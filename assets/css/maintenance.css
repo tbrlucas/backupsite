@@ -1,0 +1,99 @@
+/* Maintenance page — uses the same Bootstrap 2.3.2 and TBRLucas visual language. */
+body.maintenance-page {
+  min-width: 320px;
+  padding-top: 60px;
+  background: #fff;
+  color: #333;
+}
+.maintenance-page .page.container { max-width: 940px; margin-top: 30px; }
+.maintenance-page .maintenance-heading {
+  margin: 0 0 24px;
+  padding: 0 0 20px;
+  border-bottom: 1px solid #e5e9ee;
+}
+.maintenance-page .maintenance-kicker {
+  margin: 0 0 7px;
+  color: #7b8794;
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+}
+.maintenance-page .maintenance-heading h1 {
+  margin: 0 0 10px;
+  color: #333;
+  font-size: 34px;
+  line-height: 1.2;
+}
+.maintenance-page .maintenance-lead {
+  max-width: 720px;
+  margin: 0;
+  color: #657386;
+  font-size: 17px;
+  line-height: 1.65;
+}
+.maintenance-page .maintenance-panel {
+  padding: 22px 24px;
+  background: #f7f9fb;
+  border: 1px solid #dce3ea;
+  border-radius: 5px;
+}
+.maintenance-page .maintenance-panel h2 {
+  margin: 0 0 10px;
+  font-size: 20px;
+}
+.maintenance-page .maintenance-panel p {
+  margin: 0;
+  color: #586575;
+  line-height: 1.7;
+  white-space: pre-line;
+}
+.maintenance-page .maintenance-info {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 14px;
+  margin: 20px 0;
+}
+.maintenance-page .maintenance-info .well {
+  min-height: 105px;
+  margin: 0;
+  background: #fff;
+  border-color: #e1e6ec;
+  box-shadow: none;
+}
+.maintenance-page .maintenance-info h2 {
+  margin: 0 0 9px;
+  color: #4f7fbf;
+  font-size: 12px;
+  letter-spacing: .7px;
+  text-transform: uppercase;
+}
+.maintenance-page .maintenance-info p {
+  margin: 0;
+  color: #4f5d6d;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+.maintenance-page .maintenance-surprise {
+  margin: 22px 0 28px;
+  padding: 17px 19px;
+  background: #fff;
+  border: 1px solid #dce3ea;
+  border-radius: 5px;
+}
+.maintenance-page .maintenance-surprise p {
+  min-height: 24px;
+  margin: 12px 0 0;
+  color: #586575;
+  line-height: 1.6;
+}
+.maintenance-page .maintenance-surprise button { white-space: normal; }
+.maintenance-page .site-footer { margin-top: 30px; }
+@media(max-width:767px) {
+  body.maintenance-page { padding-top: 40px; }
+  .maintenance-page .page.container { margin-top: 18px; }
+  .maintenance-page .maintenance-heading h1 { font-size: 28px; }
+  .maintenance-page .maintenance-lead { font-size: 15px; }
+  .maintenance-page .maintenance-panel { padding: 18px; }
+  .maintenance-page .maintenance-info { grid-template-columns: 1fr; }
+  .maintenance-page .maintenance-info .well { min-height: 0; }
+}
