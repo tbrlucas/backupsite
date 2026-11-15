@@ -97,6 +97,29 @@
           : '<p class="post-empty">There are no published posts yet. Check back soon!</p>';
       }
 
+      const featuredList = document.getElementById("featured-stories-list");
+      if (featuredList) {
+        const featuredSlugs = [
+          "why-windows-7-is-the-best",
+          "is-jailbreaking-worth-it",
+          "rooting-android-and-its-consequences-should-i-really-root-my-old-device"
+        ];
+        const featured = featuredSlugs
+          .map((slug) => posts.find((post) => post.slug === slug))
+          .filter(Boolean);
+        featuredList.innerHTML = featured.length
+          ? featured.map((post, index) => {
+              const labels = ["WINDOWS", "APPLE & IOS", "ANDROID"];
+              return `<article class="featured-story-card featured-story-card-${index + 1}">
+                <p class="featured-story-label">${labels[index] || "FROM THE BLOG"}</p>
+                <h3><a href="${postUrl(post)}">${escapeHtml(post.title || "Untitled")}</a></h3>
+                <p class="featured-story-excerpt">${escapeHtml(post.excerpt || "")}</p>
+                <div class="featured-story-bottom"><span>${formatDate(post.date)}</span><a href="${postUrl(post)}">Read story <span aria-hidden="true">→</span></a></div>
+              </article>`;
+            }).join("")
+          : '<p class="post-empty">Featured stories will appear here as articles are published.</p>';
+      }
+
       if (article) {
         const slug = new URLSearchParams(location.search).get("slug");
         const post = posts.find((item) => item.slug === slug);
