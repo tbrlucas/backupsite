@@ -1,50 +1,91 @@
-# tbrlucas
+# TBRLucas
 
-A static website with recommendations, projects and practical guides for older mobile devices.
+A personal archive and technology website focused on classic mobile devices, software, computing history, projects, and practical guides.
 
-## Website
+**Website:** https://tbrlucas.github.io/
 
-- **Home** — overview and featured device topics.
-- **Projects** — project categories and experiments.
-- **Blog** — articles loaded from `assets/data/posts.json`.
-- **About** — the purpose and scope of the site.
+---
 
-The frontend uses Bootstrap 2.3.2, with project-specific styles in `assets/css/`.
+## About the project
 
-## Blog content
+TBRLucas brings together articles, downloads, experiments, and documentation related to older technology. The site is designed as a lightweight, mostly static website, with a visual style inspired by classic web design.
 
-Published posts are stored in `assets/data/posts.json`:
+## What's on the website
 
-```json
-{
-  "posts": [
-    {
-      "slug": "example-post",
-      "title": "Example post",
-      "date": "2026-11-14",
-      "excerpt": "A short summary.",
-      "content": "The article text.",
-      "published": true
-    }
-  ]
-}
+- **Home** — featured content and highlights from the archive.
+- **Blog** — articles about operating systems, mobile software, and computing history.
+- **Downloads** — a catalog of software and files, with descriptions and compatibility information.
+- **Projects** — experiments, ongoing work, and technical projects.
+- **What's New** — updates and additions to the website.
+- **About** — information about the project.
+
+## Technology
+
+- HTML, CSS, and JavaScript
+- Bootstrap 2.3.2
+- JSON files for structured website content
+- GitHub Pages for static hosting
+- Cloudflare Workers for the administration API
+
+The frontend styles are organized in the site's assets directory.
+
+## Repository overview
+
+```text
+/
+├── about/              About page
+├── assets/
+│   ├── css/            Stylesheets
+│   ├── data/           Structured website content
+│   ├── images/         Images and visual assets
+│   └── js/             Frontend scripts
+├── blog/               Blog pages
+├── downloads/          Download catalog and hosted files
+├── projects/           Project pages
+├── whats-new/          Website update pages
+├── index.html          Homepage
+├── 404.html            Custom not-found page
+├── robots.txt          Search engine crawling rules
+└── sitemap.xml         Sitemap
 ```
 
-Posts with `published: false` remain drafts and are not shown on the public site.
+## Website content
+
+Some sections use JSON files to keep content separate from page markup.
+
+| File | Purpose |
+| --- | --- |
+| `assets/data/posts.json` | Blog posts |
+| `assets/data/downloads.json` | Download catalog |
+| `assets/data/whats-new.json` | Website updates |
+
+Content entries generally include a title, URL slug, description, and publication status. Entries marked as unpublished are intended to remain out of the public-facing listings.
 
 ## Administration
 
-The static administration interface is located at `/alcatelonetouch3075m/`. Its API runs separately in the Cloudflare Worker source under `admin-worker/`.
+The website has a separate, access-controlled administration interface for maintaining selected content. Its API is handled independently from the static GitHub Pages frontend.
 
-The Worker uses a GitHub App installation limited to this repository and a Cloudflare KV namespace for short-lived authentication state and sessions.
+Access is restricted to an authorized GitHub account. Administrative access depends on authentication and server-side authorization checks, not on keeping the interface address private.
 
-### Security
+## Security
 
-- Never commit OAuth client secrets, GitHub App private keys, access tokens or `.dev.vars`.
-- Keep secrets in Cloudflare Worker secret storage.
-- Keep the GitHub App installation restricted to this repository with only the permissions required by the Worker.
-- The administration page requires an authorized GitHub account; its URL is not an authentication mechanism.
+- Never commit OAuth client secrets, GitHub App private keys, access tokens, or local secret files such as `.dev.vars`.
+- Store production credentials using the hosting platform's secret-management features.
+- Keep GitHub App access limited to this repository and grant only the permissions the integration needs.
+- Restrict administrative access to explicitly authorized accounts.
+- Treat an undisclosed URL as an additional privacy measure, never as a replacement for authentication or authorization.
+- If you discover a security issue, avoid publishing credentials or sensitive details in an issue report.
 
 ## Deployment
 
-The website is designed for GitHub Pages from the `main` branch, using the repository root as the publishing source.
+The public website is hosted with **GitHub Pages**, using the `main` branch and the repository root as the publishing source.
+
+Changes pushed to the publishing branch are picked up by the GitHub Pages deployment workflow. The administration API is deployed separately through Cloudflare, so changes to that service may require a separate deployment.
+
+## Content and software rights
+
+Names, trademarks, applications, and other materials remain the property of their respective owners. Their inclusion in the site's articles or catalog does not imply endorsement or ownership by TBRLucas. Please respect the applicable licenses and rights when using or redistributing software.
+
+---
+
+*TBRLucas — preserving and exploring technology, one version at a time.*
