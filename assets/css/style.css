@@ -480,3 +480,10 @@ body { min-width:320px; padding-top:60px; }
 .dark2010-footer { display:flex; justify-content:space-between; gap:12px; padding:15px 0; border-top:1px solid #353941; color:#747d89; font-size:11px; }
 .dark2010-footer a { color:#8eb5dc; }
 @media(max-width:767px) { .dark-2010s-blog-page{padding-top:40px}.dark2010-article-shell{margin:17px auto 30px;padding:0 17px}.dark2010-heading{padding:32px 0 24px}.dark2010-heading h1{font-size:27px}.dark2010-topbar{gap:10px}.dark2010-topbar span{font-size:9px}.dark2010-footer{flex-direction:column} }
+
+
+/* Keep footer breadcrumbs readable and separated on every page. */
+.site-footer .breadcrumb { display:flex; align-items:center; flex-wrap:wrap; gap:0; }
+.site-footer .breadcrumb li { float:none; display:flex; align-items:center; }
+.site-footer .breadcrumb li+li:before { content:"/"; padding:0 10px; color:#bbb; }
+.site-footer .breadcrumb li.active { color:#777; }
