@@ -245,10 +245,12 @@
     $("download-upload-message").textContent = "Uploading file to GitHub…";
     $("upload-download-file").disabled = true;
     try {
-      const body = new FormData();
-      body.append("file", file);
-      body.append("slug", slug);
-      const result = await api("/api/upload", {method:"POST", body});
+      const filename = encodeURIComponent(file.name || "download.bin");
+      const result = await api("/api/upload?slug=" + encodeURIComponent(slug), {
+        method:"POST",
+        headers:{"Content-Type":"application/octet-stream","X-File-Name":filename},
+        body:file
+      });
       $("download-url").value = result.url;
       $("download-size").value = result.fileSize;
       $("download-type").value = result.fileType;
