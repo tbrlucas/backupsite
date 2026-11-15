@@ -25,6 +25,19 @@
       "url": "https://tbrlucas.github.io/downloads/files/angrybirds/Angry-Birds-v2.2.0--Clutch-1.3-1.ipa",
       "notes": "",
       "published": true
+    },
+    {
+      "title": "Gmail",
+      "slug": "gmail",
+      "platform": "Android",
+      "description": "Gmail 4.0.5 is an early version of Google's official email application for Android, dating back to 2012. It represents an interesting period in the evolution of Google's mobile services, when Android applications were receiving major interface and usability improvements.",
+      "compatibility": "Android 3.2 +",
+      "version": "4.0.5",
+      "fileSize": "2.7 MB",
+      "fileType": "APK",
+      "url": "https://tbrlucas.github.io/downloads/files/gmail/com.google.android.gm_4.0.5-360_minAPI13-nodpi-_tbrlucas.github.io.apk",
+      "notes": "please google dont take down this apk",
+      "published": true
     }
   ]
 }
