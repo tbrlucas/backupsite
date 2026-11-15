@@ -19,7 +19,12 @@
           </section>
           <div class="maintenance-footer">TBRLUCAS · TEMPORARILY UNAVAILABLE</div>
         </main>`;
-      reveal();
+      const stylesheet = document.createElement("link");
+      stylesheet.rel = "stylesheet";
+      stylesheet.href = "/assets/css/style.css?v=20261115-maintenance";
+      stylesheet.addEventListener("load", reveal, {once:true});
+      stylesheet.addEventListener("error", reveal, {once:true});
+      document.head.appendChild(stylesheet);
     })
     .catch(reveal);
 })();
