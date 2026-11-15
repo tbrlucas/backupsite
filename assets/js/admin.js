@@ -44,7 +44,7 @@
     target.innerHTML = posts.slice().sort((a,b) => String(b.date).localeCompare(String(a.date))).map(post =>
       `<button class="admin-post-row" type="button" data-slug="${escapeHtml(post.slug)}">
         <strong>${escapeHtml(post.title)}</strong>
-        <span>${escapeHtml(post.date || "")} · ${({"default":"Default theme · ","ios-6":"iOS 6 theme · ","android-market-2012":"Android Market 2012 theme · ","dark-2010s":"Dark 2010s theme · ","aero":"Aero special edition · "}[post.design] || "")}${post.published ? "Published" : "Draft"}</span>
+        <span>${escapeHtml(post.date || "")} · ${({"default":"Default theme · ","ios-6":"iOS 6 theme · ","android-market-2012":"Android Market 2012 theme · ","dark-2010s":"Dark 2010s theme · ","aero":"Aero special edition · ","cydia-classic":"Cydia Classic · "}[post.design] || "")}${post.published ? "Published" : "Draft"}</span>
       </button>`
     ).join("");
     target.querySelectorAll("[data-slug]").forEach(button => {
@@ -72,7 +72,7 @@
     $("post-date").value = post.date || "";
     $("post-excerpt").value = post.excerpt || "";
     $("post-content").value = post.content || "";
-    $("post-design").value = ["default","ios-6","android-market-2012","dark-2010s","aero"].includes(post.design) ? post.design : "default";
+    $("post-design").value = ["default","ios-6","android-market-2012","dark-2010s","aero","cydia-classic"].includes(post.design) ? post.design : "default";
     $("post-published").checked = post.published !== false;
     $("delete-post-button").hidden = false;
     $("save-post-button").textContent = "Update publication";
