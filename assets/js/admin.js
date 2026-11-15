@@ -56,7 +56,7 @@
     $("post-editor").reset();
     $("post-original-slug").value = "";
     $("post-date").value = localDate();
-    $("post-published").checked = true;
+    $("post-published").checked = true;\n    $("post-design").value = "standard";
     $("delete-post-button").hidden = true;
     $("save-post-button").textContent = "Save publication";
     message("");
@@ -70,7 +70,7 @@
     $("post-slug").value = post.slug || "";
     $("post-date").value = post.date || "";
     $("post-excerpt").value = post.excerpt || "";
-    $("post-content").value = post.content || "";
+    $("post-content").value = post.content || "";\n    $("post-design").value = post.design || "standard";
     $("post-published").checked = post.published !== false;
     $("delete-post-button").hidden = false;
     $("save-post-button").textContent = "Update publication";
