@@ -2,7 +2,7 @@
 
 A personal archive and technology website focused on classic mobile devices, software, computing history, projects, and practical guides.
 
-**Website:** https://tbrlucas.github.io/
+**Backup website:** https://tbrlucas.github.io/backupsite/
 
 ---
 
