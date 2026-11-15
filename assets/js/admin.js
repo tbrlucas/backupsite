@@ -242,19 +242,56 @@
     if (file.size > 100 * 1024 * 1024) { $("download-upload-message").textContent = "This file is larger than the 100 MB limit."; return; }
     const slug = $("download-slug").value.trim() || slugify($("download-title").value);
     if (!slug) { $("download-upload-message").textContent = "Enter the application name first."; return; }
-    $("download-upload-message").textContent = "Uploading file to GitHub…";
+    $("download-upload-message").textContent = "Preparing a secure GitHub upload…";
     $("upload-download-file").disabled = true;
     try {
-      const body = new FormData();
-      body.append("file", file);
-      body.append("slug", slug);
-      const result = await api("/api/upload", {method:"POST", body});
-      $("download-url").value = result.url;
-      $("download-size").value = result.fileSize;
-      $("download-type").value = result.fileType;
-      $("download-upload-message").textContent = "Uploaded and committed to GitHub. The download URL was filled in.";
+      const access = await api("/api/upload-token");
+      const originalName = String(file.name || "download.bin").split(/[\\\\/]/).pop();
+      const safeName = originalName.normalize("NFKD").replace(/[^a-zA-Z0-9._-]+/g,"-").replace(/^-+|-+$/g,"").slice(0,120) || "download.bin";
+      const filePath = "downloads/files/" + slug + "/" + safeName;
+      const encodedPath = filePath.split("/").map(encodeURIComponent).join("/");
+      const apiUrl = "https://api.github.com/repos/" + encodeURIComponent(access.owner) + "/" + encodeURIComponent(access.repo) + "/contents/" + encodedPath;
+      const authHeaders = {Authorization:"Bearer " + access.token, Accept:"application/vnd.github+json", "X-GitHub-Api-Version":"2022-11-28"};
+      let existingSha = "";
+      const existingResponse = await fetch(apiUrl + "?ref=main", {headers:authHeaders});
+      if (existingResponse.ok) {
+        const existing = await existingResponse.json();
+        existingSha = existing.sha || "";
+      } else if (existingResponse.status !== 404) {
+        const detail = await existingResponse.json().catch(() => ({}));
+        throw new Error(detail.message || "Could not check the destination file (" + existingResponse.status + ").");
+      }
+      $("download-upload-message").textContent = "Encoding file in your browser…";
+      const bytes = new Uint8Array(await file.arrayBuffer());
+      const parts = [];
+      const chunkSize = 0x6000;
+      for (let offset = 0; offset < bytes.length; offset += chunkSize) {
+        const chunk = bytes.subarray(offset, Math.min(offset + chunkSize, bytes.length));
+        let binary = "";
+        for (let i = 0; i < chunk.length; i += 0x4000) {
+          binary += String.fromCharCode(...chunk.subarray(i, Math.min(i + 0x4000, chunk.length)));
+        }
+        parts.push(btoa(binary));
+      }
+      const base64 = parts.join("");
+      const message = "Upload download file: " + safeName;
+      const payload = new Blob([
+        JSON.stringify({message, content:""}).slice(0,-2),
+        base64,
+        JSON.stringify({branch:"main", ...(existingSha ? {sha:existingSha} : {})}).slice(1)
+      ], {type:"application/json"});
+      $("download-upload-message").textContent = "Sending file directly to GitHub…";
+      const response = await fetch(apiUrl, {method:"PUT", headers:{...authHeaders, "Content-Type":"application/json"}, body:payload});
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.message || "GitHub rejected the upload (" + response.status + ").");
+      const publicUrl = "https://tbrlucas.github.io/" + filePath.split("/").map(encodeURIComponent).join("/");
+      $("download-url").value = publicUrl;
+      $("download-size").value = (file.size / (1024 * 1024)).toFixed(1) + " MB";
+      $("download-type").value = safeName.includes(".") ? safeName.split(".").pop().toUpperCase() : "FILE";
+      $("download-upload-message").textContent = "Upload complete. The file is committed in the repository and the download URL is ready.";
     } catch (error) {
-      $("download-upload-message").textContent = "Upload failed: " + error.message;
+      const detail = error instanceof TypeError ? "The browser could not reach GitHub. Check the connection and retry; the file was not marked as uploaded." : error.message;
+      $("download-upload-message").textContent = "Upload failed: " + detail;
     } finally { $("upload-download-file").disabled = false; }
   });
 
