@@ -1,56 +1,63 @@
-# tbrlucas content administration service
+# TBRLucas Backup — administration service
 
-This folder contains the Cloudflare Worker API used by the static content panel at `/alcatelonetouch3075m/`.
+This Worker is a **separate administration backend for the backupsite repository**. It must not reuse the production site's Worker or GitHub App installation.
 
 ## Architecture
 
-- A GitHub App handles repository access. Install it on **only** `tbrlucas/tbrlucas.github.io`.
-- GitHub App repository permission: **Contents — Read and write**. Do not grant administration, issues, pull requests, or access to other repositories.
-- The GitHub App user-authorization flow identifies the administrator. The Worker checks the exact login in `ADMIN_GITHUB_LOGIN`.
-- The Worker creates short-lived opaque browser sessions in Cloudflare KV.
-- For repository operations, the Worker creates a short-lived installation token limited to the installed repository and Contents permission.
-- Blog posts are stored in `assets/data/posts.json` on branch `main`.
-- Download entries are stored in `assets/data/downloads.json` on branch `main`; the actual files are hosted at their HTTPS URLs.
+- GitHub App user authorization signs the administrator in.
+- The Worker allows only the GitHub login configured in `ADMIN_GITHUB_LOGIN`.
+- OAuth state and short-lived opaque sessions are stored in Cloudflare KV, bound as `AUTH_KV`.
+- A GitHub App installation token is used for repository operations.
+- The GitHub App must be installed on **only** `tbrlucas/backupsite`, with **Contents: Read and write** and no other repository permissions.
+- The Worker reads and writes this repository's `main` branch.
 
 ## Required setup
 
-1. Create a Cloudflare Worker and a KV namespace. Bind the namespace as `AUTH_KV`.
-2. Create a GitHub App (not an OAuth App). Enable user authorization and set its callback URL to the Worker URL plus `/auth/callback`.
-3. In the GitHub App settings, set repository permissions to **Contents: Read and write**. Leave all other repository permissions at No access.
-4. Install the GitHub App on the account that owns the site and select **Only select repositories** → `tbrlucas.github.io`.
-5. Copy the GitHub App ID, client ID, installation ID, and private key. Keep the private key secret.
-6. Set the Worker variables listed below and add the two secrets using Wrangler/Cloudflare secret storage.
+1. Create a **new Cloudflare Worker** for the backup environment and a KV namespace. Bind the namespace as `AUTH_KV`.
+2. Create a **separate GitHub App** for the backup environment. Enable user authorization and set its callback URL to the Worker URL followed by `/auth/callback`.
+3. Set the GitHub App repository permission to **Contents: Read and write**. Leave all other permissions at No access.
+4. Install the App using **Only select repositories** and select only `tbrlucas/backupsite`.
+5. Record the App ID, client ID, installation ID and private key. Never commit the private key or client secret.
+6. Configure the Worker variables below and add the two encrypted secrets in Cloudflare.
+7. Deploy the Worker.
+8. Only after deployment, put its `https://…workers.dev` origin in `assets/js/admin-config.js` as `apiBase`.
 
 ## Worker variables
 
-- `ADMIN_ORIGIN`: exact admin site origin, e.g. `https://tbrlucas.github.io` (no trailing slash).
-- `ADMIN_GITHUB_LOGIN`: only allowed GitHub username.
-- `REPO_OWNER`: `tbrlucas`.
-- `REPO_NAME`: `tbrlucas.github.io`.
-- `GITHUB_CALLBACK_URL`: exact Worker URL followed by `/auth/callback`.
-- `GITHUB_APP_ID`: numeric GitHub App ID.
-- `GITHUB_APP_INSTALLATION_ID`: installation ID for the installation that has access to this repository.
-- `GITHUB_OAUTH_CLIENT_ID`: GitHub App client ID.
+| Variable | Value |
+| --- | --- |
+| `ADMIN_ORIGIN` | `https://tbrlucas.github.io` |
+| `ADMIN_PATH` | `/backupsite/alcatelonetouch3075m/` |
+| `ADMIN_GITHUB_LOGIN` | `tbrlucas` |
+| `REPO_OWNER` | `tbrlucas` |
+| `REPO_NAME` | `backupsite` |
+| `GITHUB_CALLBACK_URL` | Exact Worker URL plus `/auth/callback` |
+| `GITHUB_APP_ID` | Numeric GitHub App ID |
+| `GITHUB_APP_INSTALLATION_ID` | Installation ID for the App installed on `backupsite` |
+| `GITHUB_OAUTH_CLIENT_ID` | GitHub App client ID |
 
-Encrypted Worker secrets (never put these in Git):
+Encrypted Worker secrets (Cloudflare secret storage only):
 
-- `GITHUB_OAUTH_CLIENT_SECRET`: GitHub App client secret.
-- `GITHUB_APP_PRIVATE_KEY`: PKCS#8 PEM private key. GitHub's downloaded RSA key may be PKCS#1 (`BEGIN RSA PRIVATE KEY`); convert it locally before storing it: `openssl pkcs8 -topk8 -nocrypt -in app.private-key.pem -out app.private-key.pkcs8.pem`. The resulting file should begin with `BEGIN PRIVATE KEY`. Store its full contents as the encrypted Worker secret.
+- `GITHUB_OAUTH_CLIENT_SECRET`
+- `GITHUB_APP_PRIVATE_KEY` — PKCS#8 PEM beginning with `-----BEGIN PRIVATE KEY-----`
 
-The example `wrangler.toml.example` contains the non-secret variable template. Copy it to `wrangler.toml`, fill in the real IDs, and keep local secret files out of Git.
+If the downloaded private key is PKCS#1 (`BEGIN RSA PRIVATE KEY`), convert it locally before adding it as a secret. Never paste either secret into chat, GitHub files, or this README.
 
-## Deploy and connect
+## Wrangler
 
-1. Deploy `worker.js` to Cloudflare.
-2. Bind KV as `AUTH_KV`, set the variables, and add both encrypted secrets.
-3. In GitHub App settings, make sure the callback URL exactly matches `GITHUB_CALLBACK_URL`.
-4. Set `apiBase` in `assets/js/admin-config.js` to the Worker origin, without a trailing slash.
-5. Save that front-end config file in the private repository.
+A non-secret template is provided in `wrangler.toml.example`. Replace the KV namespace ID and configure the variables before deploying. Secrets must be added separately with Cloudflare's secret management.
+
+## Sign-in
+
+After the Worker is deployed and `apiBase` is configured, open:
+
+`https://tbrlucas.github.io/backupsite/alcatelonetouch3075m/?login=1`
+
+The plain route intentionally sends unauthenticated visitors to the site's 404 page. The query parameter only reveals the sign-in screen; it does **not** grant access. Every API operation still requires a valid Worker session and the authorized GitHub account.
 
 ## Security notes
 
-- The browser never receives the GitHub App private key, app installation token, or OAuth client secret.
-- The Worker verifies OAuth state, checks the allowed GitHub login, checks the exact Origin, and uses short-lived sessions.
-- The installation token is limited by GitHub to the repositories selected during installation and the app's granted permissions.
-- Do not enable sign-in until the GitHub App is installed only on the intended repository and its permissions have been reviewed.
-- The static admin page URL is not itself secret; every API action requires a valid authorized session.
+- Do not point this backup frontend at the production Worker. That could cause backup administration actions to modify production content.
+- Do not install the backup GitHub App on the production repository.
+- The browser never receives the GitHub App private key, OAuth client secret, or installation token except for the narrowly scoped, short-lived upload token returned to an authenticated admin session.
+- The URL being obscure is not an authentication mechanism. Authorization is enforced by the Worker.
