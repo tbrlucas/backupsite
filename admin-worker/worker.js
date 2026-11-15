@@ -170,7 +170,7 @@ export default {
         if ((user.login || "").toLowerCase() !== env.ADMIN_GITHUB_LOGIN.toLowerCase()) return new Response("This GitHub account is not allowed to administer this blog.",{status:403});
         const sessionId = randomToken();
         await env.AUTH_KV.put("session:" + sessionId,JSON.stringify({login:user.login}),{expirationTtl:28800});
-        return Response.redirect(env.ADMIN_ORIGIN.replace(/\/$/,"") + ADMIN_PATH + "#session=" + sessionId,302);
+        return Response.redirect(env.ADMIN_ORIGIN.replace(/\/$/,"") + String(env.ADMIN_PATH || "/backupsite/alcatelonetouch3075m/") + "#session=" + sessionId,302);
       }
       if (!origin) return json({error:"Origin not allowed."},403,"");
       const session = await getSession(request,env);
