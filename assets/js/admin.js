@@ -114,6 +114,11 @@
     } catch (error) {
       message("Could not load blog posts: " + error.message, true);
     }
+    try {
+      await loadMaintenanceSettings();
+    } catch (error) {
+      maintenanceMessage("Could not load maintenance settings: " + error.message, true);
+    }
   }
 
   const fragment = new URLSearchParams(location.hash.slice(1));
@@ -419,24 +424,92 @@
     updates = Array.isArray(data.updates) ? data.updates : [];
     renderUpdates();
   }
-  $("show-posts-tab").addEventListener("click", () => {
-    show($("admin-posts-section"), true); show($("admin-downloads-section"), false); show($("admin-whats-new-section"), false);
-    $("show-posts-tab").classList.add("btn-primary"); $("show-downloads-tab").classList.remove("btn-primary"); $("show-whats-new-tab").classList.remove("btn-primary");
-  });
-  $("show-downloads-tab").addEventListener("click", () => {
-    show($("admin-posts-section"), false); show($("admin-downloads-section"), true); show($("admin-whats-new-section"), false);
-    $("show-downloads-tab").classList.add("btn-primary"); $("show-posts-tab").classList.remove("btn-primary"); $("show-whats-new-tab").classList.remove("btn-primary");
-    if (!$("admin-download-list").dataset.loaded) {
+  function showAdminSection(section) {
+    ["posts","downloads","whats-new","maintenance"].forEach(name => {
+      show($("admin-" + name + "-section"), name === section);
+      const button = $("show-" + name + "-tab");
+      if (button) button.classList.toggle("btn-primary", name === section);
+    });
+    if (section === "downloads" && !$("admin-download-list").dataset.loaded) {
       loadDownloads().then(() => $("admin-download-list").dataset.loaded = "1").catch(error => downloadMessage(error.message, true));
     }
-  });
-  $("show-whats-new-tab").addEventListener("click", () => {
-    show($("admin-posts-section"), false); show($("admin-downloads-section"), false); show($("admin-whats-new-section"), true);
-    $("show-whats-new-tab").classList.add("btn-primary"); $("show-posts-tab").classList.remove("btn-primary"); $("show-downloads-tab").classList.remove("btn-primary");
-    if (!$("admin-update-list").dataset.loaded) {
+    if (section === "whats-new" && !$("admin-update-list").dataset.loaded) {
       loadUpdates().then(() => $("admin-update-list").dataset.loaded = "1").catch(error => updateMessage(error.message, true));
     }
+  }
+
+  let maintenanceSettings = {enabled:false, eta:"", reason:""};
+  const maintenanceMessage = (text, isError = false) => {
+    const target = $("maintenance-message");
+    if (!target) return;
+    target.textContent = text;
+    target.className = isError ? "admin-message error" : "admin-message";
+  };
+  function renderMaintenancePreview() {
+    $("maintenance-preview-eta").textContent = maintenanceSettings.eta || "Not specified";
+    $("maintenance-preview-reason").textContent = maintenanceSettings.reason || "Not specified";
+  }
+  async function loadMaintenanceSettings() {
+    const response = await fetch("../assets/data/maintenance.json?ts=" + Date.now(), {cache:"no-store"});
+    if (!response.ok) throw new Error("Could not read maintenance.json (" + response.status + ").");
+    maintenanceSettings = await response.json();
+    $("maintenance-enabled").checked = maintenanceSettings.enabled === true;
+    $("maintenance-eta").value = maintenanceSettings.eta || "";
+    $("maintenance-reason").value = maintenanceSettings.reason || "";
+    renderMaintenancePreview();
+    maintenanceMessage("Settings loaded.");
+  }
+  $("maintenance-eta").addEventListener("input", () => {
+    maintenanceSettings.eta = $("maintenance-eta").value.trim();
+    renderMaintenancePreview();
   });
+  $("maintenance-reason").addEventListener("input", () => {
+    maintenanceSettings.reason = $("maintenance-reason").value.trim();
+    renderMaintenancePreview();
+  });
+  $("maintenance-enabled").addEventListener("change", () => {
+    maintenanceSettings.enabled = $("maintenance-enabled").checked;
+  });
+  $("maintenance-editor").addEventListener("submit", async event => {
+    event.preventDefault();
+    const settings = {
+      enabled: $("maintenance-enabled").checked,
+      eta: $("maintenance-eta").value.trim(),
+      reason: $("maintenance-reason").value.trim()
+    };
+    try {
+      $("save-maintenance-button").disabled = true;
+      maintenanceMessage("Saving settings to GitHub…");
+      const access = await api("/api/upload-token");
+      const filePath = "assets/data/maintenance.json";
+      const encodedPath = filePath.split("/").map(encodeURIComponent).join("/");
+      const apiUrl = "https://api.github.com/repos/" + encodeURIComponent(access.owner) + "/" + encodeURIComponent(access.repo) + "/contents/" + encodedPath;
+      const headers = {Authorization:"Bearer " + access.token, Accept:"application/vnd.github+json", "X-GitHub-Api-Version":"2022-11-28"};
+      const currentResponse = await fetch(apiUrl + "?ref=main", {headers});
+      if (!currentResponse.ok) throw new Error("Could not read the current settings (" + currentResponse.status + ").");
+      const current = await currentResponse.json();
+      const bytes = new TextEncoder().encode(JSON.stringify(settings, null, 2) + "\n");
+      let binary = "";
+      bytes.forEach(byte => binary += String.fromCharCode(byte));
+      const response = await fetch(apiUrl, {method:"PUT",headers:{...headers,"Content-Type":"application/json"},body:JSON.stringify({
+        message:"Update website maintenance settings",content:btoa(binary),branch:"main",sha:current.sha
+      })});
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.message || "GitHub rejected the settings (" + response.status + ").");
+      maintenanceSettings = settings;
+      renderMaintenancePreview();
+      maintenanceMessage("Settings saved and committed. The public site will update after GitHub Pages deploys.");
+    } catch (error) {
+      maintenanceMessage("Save failed: " + error.message, true);
+    } finally {
+      $("save-maintenance-button").disabled = false;
+    }
+  });
+
+  $("show-posts-tab").addEventListener("click", () => showAdminSection("posts"));
+  $("show-downloads-tab").addEventListener("click", () => showAdminSection("downloads"));
+  $("show-whats-new-tab").addEventListener("click", () => showAdminSection("whats-new"));
+  $("show-maintenance-tab").addEventListener("click", () => showAdminSection("maintenance"));
   $("new-update-button").addEventListener("click", clearUpdateEditor);
   $("clear-update-button").addEventListener("click", clearUpdateEditor);
   $("update-editor").addEventListener("submit", async event => {
