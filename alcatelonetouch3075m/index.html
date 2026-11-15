@@ -9,7 +9,7 @@
 <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap-responsive.min.css">
-<link rel="stylesheet" href="../assets/css/style.css?v=20261115-cydia-classic">
+<link rel="stylesheet" href="../assets/css/style.css?v=20261115-maintenance">
 <title>Administration :: tbrlucas</title>
 </head>
 <body class="admin-page">
@@ -57,6 +57,7 @@
       <button type="button" class="btn btn-primary" id="show-posts-tab">Blog posts</button>
       <button type="button" class="btn" id="show-downloads-tab">Downloads library</button>
       <button type="button" class="btn" id="show-whats-new-tab">What’s New</button>
+      <button type="button" class="btn" id="show-maintenance-tab">Maintenance</button>
     </nav>
 
     <section id="admin-posts-section" class="admin-workspace">
@@ -86,6 +87,29 @@
       </div>
     </section>
 
+
+    <section id="admin-maintenance-section" class="admin-workspace" hidden>
+      <div class="admin-section-heading">
+        <div><p class="admin-eyebrow">SITE AVAILABILITY</p><h3>Maintenance mode</h3><p>Temporarily replace the public website with a maintenance notice.</p></div>
+      </div>
+      <form id="maintenance-editor" class="maintenance-admin-form">
+        <label class="admin-publish maintenance-toggle"><input id="maintenance-enabled" type="checkbox"> Enable maintenance mode</label>
+        <p class="admin-small">When enabled, visitors to the public pages will see the maintenance screen. The administration panel remains accessible.</p>
+        <label for="maintenance-eta">Estimated time for the end of maintenance</label>
+        <input class="input-block-level" id="maintenance-eta" type="text" maxlength="100" placeholder="e.g. Today at 6:00 PM (BRT)">
+        <label for="maintenance-reason">Reason</label>
+        <textarea class="input-block-level admin-textarea" id="maintenance-reason" rows="3" maxlength="300" placeholder="e.g. Scheduled website updates"></textarea>
+        <div class="admin-actions"><button class="btn btn-primary" id="save-maintenance-button" type="submit">Save maintenance settings</button></div>
+        <p id="maintenance-message" class="admin-message" role="status" aria-live="polite"></p>
+      </form>
+      <div class="maintenance-preview">
+        <p class="admin-eyebrow">VISITOR MESSAGE PREVIEW</p>
+        <strong>Hello! I know you're interested in seeing the site, but you won't be able to... at least not right now. We're currently undergoing maintenance.</strong>
+        <p><strong>Please come back soon!</strong></p>
+        <p><strong>Estimated time for the end of maintenance:</strong> <span id="maintenance-preview-eta">Not specified</span></p>
+        <p><strong>Reason:</strong> <span id="maintenance-preview-reason">Not specified</span></p>
+      </div>
+    </section>
 
     <section id="admin-whats-new-section" class="admin-workspace" hidden>
       <div class="admin-section-heading">
