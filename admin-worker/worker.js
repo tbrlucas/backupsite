@@ -143,19 +143,19 @@ async function writePosts(env, token, posts, sha) {
   })});
 }
 
-async function getDownloadsRelease(env, token) {
+async function getDownloadsRelease(env, token, slug) {
   const base = "/repos/" + env.REPO_OWNER + "/" + env.REPO_NAME;
   try {
-    return await githubRequest(base + "/releases/tags/site-downloads", token);
+    return await githubRequest(base + "/releases/tags/download-" + slug, token);
   } catch (error) {
     if (!String(error.message).includes("Not Found")) throw error;
     return githubRequest(base + "/releases", token, {
       method:"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify({
-        tag_name:"site-downloads",
+        tag_name:"download-" + slug,
         target_commitish:"main",
-        name:"Website Downloads",
+        name:"Download: " + slug,
         body:"Download files published on tbrlucas.github.io.",
         draft:false,
         prerelease:false
@@ -249,7 +249,7 @@ export default {
         const safeName = originalName.normalize("NFKD").replace(/[^a-zA-Z0-9._-]+/g,"-").replace(/^-+|-+$/g,"").slice(0,120) || "download.bin";
         const filePath = "downloads/files/" + slug + "/" + safeName;
         const token = await installationToken(env);
-        const release = await getDownloadsRelease(env,token);
+        const release = await getDownloadsRelease(env,token,slug);
         const base = "/repos/" + env.REPO_OWNER + "/" + env.REPO_NAME;
         const assets = await githubRequest(base + "/releases/" + release.id + "/assets?per_page=100",token);
         const previous = assets.find(asset => asset.name === safeName);
