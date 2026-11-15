@@ -432,3 +432,51 @@ body { min-width:320px; padding-top:60px; }
   .market-sidebar { order:2; }
   .market-card-footer { padding:10px 17px; }
 }
+
+
+/* iOS 6-inspired blog article theme. Scoped to individual article pages only. */
+.ios6-blog-page { padding-top:60px; background:#e8edf3; }
+.ios6-article-shell { max-width:900px; margin:28px auto 36px; }
+.ios6-blog-top { display:flex; align-items:center; gap:10px; padding:12px 16px; color:#fff; background:linear-gradient(#6b91bd,#3e6595); border:1px solid #34577f; border-radius:6px 6px 0 0; box-shadow:inset 0 1px rgba(255,255,255,.35); text-shadow:0 -1px rgba(0,0,0,.25); font-size:15px; font-weight:bold; }
+.ios6-blog-mark { display:grid; place-items:center; width:25px; height:25px; color:#fff; background:linear-gradient(#a9c8e7,#5c83b1); border:1px solid rgba(255,255,255,.6); border-radius:6px; box-shadow:0 1px 2px rgba(0,0,0,.2); }
+.ios6-blog-top small { color:#dce8f5; font-size:11px; }
+.ios6-blog-top>a { margin-left:auto; color:#fff; font-size:12px; }
+.ios6-article-card { overflow:hidden; background:#fff; border:1px solid #c5ced9; border-top:0; border-radius:0 0 6px 6px; box-shadow:0 3px 12px rgba(31,53,76,.13); }
+.ios6-article-toolbar { display:flex; justify-content:space-between; padding:9px 23px; color:#60758d; background:linear-gradient(#f8fafc,#e7edf3); border-bottom:1px solid #d3dce6; font-size:10px; font-weight:bold; letter-spacing:1px; }
+.ios6-article-heading { padding:27px 30px 22px; background:linear-gradient(#fff,#f8fafc); border-bottom:1px solid #e1e6ec; }
+.ios6-article-heading>p { margin:0 0 7px; color:#6687aa; font-size:11px; font-weight:bold; text-transform:uppercase; letter-spacing:1px; }
+.ios6-article-heading h1 { margin:0 0 10px; color:#293b50; font-size:29px; line-height:1.2; }
+.ios6-article-heading>div { color:#748397; font-size:14px; line-height:1.6; }
+.ios6-article-content { padding:25px 30px 32px; color:#46576a; font-size:14px; line-height:1.85; overflow-wrap:anywhere; }
+.ios6-article-content h2 { margin:25px 0 9px; padding-bottom:7px; color:#3c6590; border-bottom:1px solid #e5ebf1; font-size:21px; }
+.ios6-article-content h2:first-child { margin-top:0; }
+.ios6-article-content h3 { color:#4c6e91; }
+.ios6-article-content p { margin:0 0 15px; }
+.ios6-article-content li { margin-bottom:7px; }
+.ios6-article-card>footer { display:flex; justify-content:space-between; gap:12px; padding:13px 22px; background:#f5f7f9; border-top:1px solid #e1e6ec; font-size:11px; }
+.ios6-article-card>footer a { color:#4777a8; }
+.ios6-article-card>footer span { color:#98a4b1; }
+@media(max-width:767px) { .ios6-blog-page{padding-top:40px}.ios6-article-shell{margin:15px 10px 25px}.ios6-article-heading{padding:21px 18px}.ios6-article-heading h1{font-size:23px}.ios6-article-content{padding:20px 18px}.ios6-article-card>footer{flex-direction:column}.ios6-blog-top{padding:10px 12px} }
+
+/* Dark 2010s-inspired personal blog theme. Scoped to individual article pages only. */
+.dark-2010s-blog-page { padding-top:60px; background:#17191d; color:#c7cbd1; }
+.dark2010-article-shell { max-width:850px; margin:30px auto 40px; padding:0 22px; }
+.dark2010-topbar { display:flex; align-items:center; gap:18px; padding:13px 0; border-bottom:1px solid #353941; color:#858d99; font-size:11px; letter-spacing:.7px; }
+.dark2010-topbar>a:first-child { color:#e6e9ee; font-size:18px; font-weight:bold; letter-spacing:-.5px; }
+.dark2010-topbar>a:last-child { margin-left:auto; color:#8eb5dc; letter-spacing:0; }
+.dark2010-heading { padding:43px 0 30px; }
+.dark2010-heading>p { margin:0 0 12px; color:#7c9dbd; font-size:10px; font-weight:bold; letter-spacing:2px; }
+.dark2010-heading h1 { margin:0 0 14px; color:#f0f1f3; font-size:34px; line-height:1.2; overflow-wrap:anywhere; }
+.dark2010-heading>div { max-width:700px; color:#9da5b0; font-size:15px; line-height:1.7; }
+.dark2010-rule { height:3px; background:linear-gradient(90deg,#426b91 0,#426b91 90px,#30343b 90px,#30343b 100%); }
+.dark2010-content { padding:28px 0 35px; color:#c0c5cd; font-size:14px; line-height:1.9; overflow-wrap:anywhere; }
+.dark2010-content h2 { margin:27px 0 10px; padding-bottom:8px; color:#e3e8ee; border-bottom:1px solid #353a43; font-size:21px; }
+.dark2010-content h2:first-child { margin-top:0; }
+.dark2010-content h3 { color:#b7c9dc; }
+.dark2010-content p { margin:0 0 16px; }
+.dark2010-content a { color:#8eb5dc; }
+.dark2010-content strong { color:#eef1f5; }
+.dark2010-content li { margin-bottom:7px; }
+.dark2010-footer { display:flex; justify-content:space-between; gap:12px; padding:15px 0; border-top:1px solid #353941; color:#747d89; font-size:11px; }
+.dark2010-footer a { color:#8eb5dc; }
+@media(max-width:767px) { .dark-2010s-blog-page{padding-top:40px}.dark2010-article-shell{margin:17px auto 30px;padding:0 17px}.dark2010-heading{padding:32px 0 24px}.dark2010-heading h1{font-size:27px}.dark2010-topbar{gap:10px}.dark2010-topbar span{font-size:9px}.dark2010-footer{flex-direction:column} }

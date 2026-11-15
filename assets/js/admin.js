@@ -44,7 +44,7 @@
     target.innerHTML = posts.slice().sort((a,b) => String(b.date).localeCompare(String(a.date))).map(post =>
       `<button class="admin-post-row" type="button" data-slug="${escapeHtml(post.slug)}">
         <strong>${escapeHtml(post.title)}</strong>
-        <span>${escapeHtml(post.date || "")} · ${post.design === "android-market-2012" ? "Android Market layout · " : ""}${post.published ? "Published" : "Draft"}</span>
+        <span>${escapeHtml(post.date || "")} · ${({"ios-6":"iOS 6 theme · ","android-market-2012":"Android Market 2012 theme · ","dark-2010s":"Dark 2010s theme · "}[post.design] || "")}${post.published ? "Published" : "Draft"}</span>
       </button>`
     ).join("");
     target.querySelectorAll("[data-slug]").forEach(button => {
@@ -57,7 +57,7 @@
     $("post-original-slug").value = "";
     $("post-date").value = localDate();
     $("post-published").checked = true;
-    $("post-design").value = "standard";
+    $("post-design").value = "ios-6";
     $("delete-post-button").hidden = true;
     $("save-post-button").textContent = "Save publication";
     message("");
@@ -72,7 +72,7 @@
     $("post-date").value = post.date || "";
     $("post-excerpt").value = post.excerpt || "";
     $("post-content").value = post.content || "";
-    $("post-design").value = post.design || "standard";
+    $("post-design").value = ["ios-6","android-market-2012","dark-2010s"].includes(post.design) ? post.design : "ios-6";
     $("post-published").checked = post.published !== false;
     $("delete-post-button").hidden = false;
     $("save-post-button").textContent = "Update publication";

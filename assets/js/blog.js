@@ -63,10 +63,11 @@
   };
 
   const cardMarkup = (post) => {
-    const market = post.design === "android-market-2012";
+    const theme = post.design || "ios-6";
+    const themeLabels = {"ios-6":"iOS 6 edition","android-market-2012":"Android Market 2012 edition","dark-2010s":"Dark 2010s edition"};
     return `
-      <article class="blog-card${market ? " blog-card-market" : ""}">
-        <div class="blog-card-meta"><span>${formatDate(post.date)}</span><span>${market ? "Android Market edition" : "Blog post"}</span></div>
+      <article class="blog-card blog-card-${escapeHtml(theme)}">
+        <div class="blog-card-meta"><span>${formatDate(post.date)}</span><span>${escapeHtml(themeLabels[theme] || "Blog post")}</span></div>
         <h3><a href="${postUrl(post)}">${escapeHtml(post.title || "Untitled")}</a></h3>
         <p>${escapeHtml(post.excerpt || "")}</p>
         <a class="blog-read-link" href="${postUrl(post)}">Read more <span aria-hidden="true">→</span></a>
@@ -106,7 +107,8 @@
         }
 
         const content = renderContent(post.content);
-        if (post.design === "android-market-2012") {
+        const theme = post.design || "ios-6";
+        if (theme === "android-market-2012") {
           document.body.classList.add("android-market-page");
           article.className = "market-article-shell";
           article.innerHTML = `
@@ -120,12 +122,12 @@
                 <span class="active">FEATURED</span><span>APPS</span><span>GAMES</span><span>MY LIBRARY</span>
               </nav>
             </div>
-            <div class="market-breadcrumb"><a href="/">Home</a><span>›</span><a href="/blog/">Blog</a><span>›</span><span>Android</span></div>
+            <div class="market-breadcrumb"><a href="/">Home</a><span>›</span><a href="/blog/">Blog</a><span>›</span><span>Article</span></div>
             <div class="market-detail-card">
               <header class="market-app-heading">
-                <div class="market-app-icon" aria-hidden="true"><span>ANDROID</span><strong>2012</strong></div>
+                <div class="market-app-icon" aria-hidden="true"><span>tbrlucas</span><strong>Blog</strong></div>
                 <div class="market-app-heading-copy">
-                  <p class="market-eyebrow">ANDROID GUIDE · ROOT ACCESS</p>
+                  <p class="market-eyebrow">TBRLUCAS BLOG · ANDROID MARKET EDITION</p>
                   <h1>${escapeHtml(post.title || "Untitled")}</h1>
                   <p class="market-excerpt">${escapeHtml(post.excerpt || "")}</p>
                   <div class="market-meta"><span>${formatDate(post.date)}</span><span>tbrlucas editorial</span></div>
@@ -136,16 +138,36 @@
                 <aside class="market-sidebar">
                   <div class="market-side-panel">
                     <h2>ABOUT THIS ARTICLE</h2>
-                    <p>A practical look at Android root access, its possibilities and the trade-offs worth knowing before making changes.</p>
-                    <div class="market-side-line"><span>TOPIC</span><strong>Android</strong></div>
-                    <div class="market-side-line"><span>FORMAT</span><strong>In-depth guide</strong></div>
+                    <p>${escapeHtml(post.excerpt || "An article from the tbrlucas blog.")}</p>
+                    <div class="market-side-line"><span>SECTION</span><strong>Blog</strong></div>
+                    <div class="market-side-line"><span>FORMAT</span><strong>Article</strong></div>
                   </div>
-                  <div class="market-side-note"><strong>Before you begin</strong><p>Root access changes the security model of your device. Read the risks carefully and check support for your exact model.</p></div>
+                  <div class="market-side-note"><strong>Keep exploring</strong><p>Discover more articles and stories from the tbrlucas blog.</p></div>
                   <a class="market-back-link" href="/blog/">‹ Back to all articles</a>
                 </aside>
               </div>
               <footer class="market-card-footer">ANDROID MARKET STYLE · TBRLUCAS BLOG</footer>
             </div>`;
+        } else if (theme === "ios-6") {
+          document.body.classList.add("ios6-blog-page");
+          article.className = "ios6-article-shell";
+          article.innerHTML = `
+            <div class="ios6-blog-top"><span class="ios6-blog-mark">t</span><span>tbrlucas <small> / BLOG</small></span><a href="/blog/">All articles</a></div>
+            <div class="ios6-article-card">
+              <div class="ios6-article-toolbar"><span>ARTICLE</span><span>${formatDate(post.date)}</span></div>
+              <header class="ios6-article-heading"><p>tbrlucas blog</p><h1>${escapeHtml(post.title || "Untitled")}</h1><div>${escapeHtml(post.excerpt || "")}</div></header>
+              <div class="ios6-article-content">${content}</div>
+              <footer><a href="/blog/">‹ Back to the blog</a><span>Designed with an iOS 6-inspired look</span></footer>
+            </div>`;
+        } else if (theme === "dark-2010s") {
+          document.body.classList.add("dark-2010s-blog-page");
+          article.className = "dark2010-article-shell";
+          article.innerHTML = `
+            <div class="dark2010-topbar"><a href="/">tbrlucas</a><span>PERSONAL BLOG / ${formatDate(post.date)}</span><a href="/blog/">← Blog index</a></div>
+            <header class="dark2010-heading"><p>THOUGHTS, NOTES & TECHNOLOGY</p><h1>${escapeHtml(post.title || "Untitled")}</h1><div>${escapeHtml(post.excerpt || "")}</div></header>
+            <div class="dark2010-rule"></div>
+            <div class="dark2010-content">${content}</div>
+            <footer class="dark2010-footer"><a href="/blog/">← Back to all posts</a><span>tbrlucas · independent blog</span></footer>`;
         } else {
           article.className = "well article-panel";
           article.innerHTML = `<div class="copy-panel"><p class="blog-list-meta">${formatDate(post.date)}</p><h1>${escapeHtml(post.title || "Untitled")}</h1><p class="article-excerpt">${escapeHtml(post.excerpt || "")}</p><div class="blog-article-content">${content}</div></div>`;
