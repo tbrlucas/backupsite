@@ -1,17 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <defs>
-    <linearGradient id="blue" x2="0" y2="1">
-      <stop offset="0" stop-color="#8db9ec"/>
-      <stop offset=".48" stop-color="#4e86cb"/>
-      <stop offset="1" stop-color="#285b9f"/>
-    </linearGradient>
-    <linearGradient id="shine" x2="0" y2="1">
-      <stop offset="0" stop-color="#fff" stop-opacity=".48"/>
-      <stop offset=".5" stop-color="#fff" stop-opacity="0"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#397fe0"/>
+      <stop offset="1" stop-color="#17428f"/>
     </linearGradient>
   </defs>
-  <rect x="2" y="2" width="60" height="60" rx="13" fill="url(#blue)" stroke="#193f70" stroke-width="2"/>
-  <path d="M4 15Q4 4 15 4H49Q60 4 60 15V30H4Z" fill="url(#shine)"/>
-  <path d="M20 18h24v7H20zm8-5h8v30h-8z" fill="#fff" opacity=".96"/>
-  <path d="M18 45h28" stroke="#173e6b" stroke-width="2" stroke-linecap="round" opacity=".35"/>
+  <rect width="64" height="64" rx="15" fill="#10264a"/>
+  <rect x="4" y="4" width="56" height="56" rx="13" fill="url(#bg)"/>
+  <rect x="17" y="9" width="30" height="46" rx="7" fill="#fff"/>
+  <rect x="20" y="13" width="24" height="35" rx="3" fill="#eaf2ff"/>
+  <path d="M32 19v17m-7-7 7 7 7-7" fill="none" stroke="#2464c0" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="27" y="50" width="10" height="2.5" rx="1.25" fill="#2464c0"/>
 </svg>
