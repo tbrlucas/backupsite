@@ -64,7 +64,7 @@
 
   const cardMarkup = (post) => {
     const theme = post.design || "default";
-    const themeLabels = {"default":"Default theme","ios-6":"iOS 6 edition","android-market-2012":"Android Market 2012 edition","dark-2010s":"Dark 2010s edition"};
+    const themeLabels = {"default":"Default theme","ios-6":"iOS 6 edition","android-market-2012":"Android Market 2012 edition","dark-2010s":"Dark 2010s edition","aero":"Aero special edition"};
     return `
       <article class="blog-card blog-card-${escapeHtml(theme)}">
         <div class="blog-card-meta"><span>${formatDate(post.date)}</span><span>${escapeHtml(themeLabels[theme] || "Blog post")}</span></div>
@@ -148,6 +148,36 @@
               </div>
               <footer class="market-card-footer">ANDROID MARKET STYLE · TBRLUCAS BLOG</footer>
             </div>`;
+        } else if (theme === "aero") {
+          document.body.classList.add("aero-blog-page");
+          article.className = "aero-article-shell";
+          article.innerHTML = `
+            <div class="aero-atmosphere" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+            <header class="aero-topbar">
+              <a class="aero-brand" href="/"><span class="aero-brand-orb"></span><span><strong>tbrlucas</strong><small>TECHNOLOGY JOURNAL</small></span></a>
+              <span class="aero-edition-label">AERO SPECIAL EDITION</span>
+              <a class="aero-index-link" href="/blog/">All articles <span aria-hidden="true">→</span></a>
+            </header>
+            <section class="aero-hero">
+              <p class="aero-kicker"><span></span> FEATURE STORY · WINDOWS</p>
+              <h1>${escapeHtml(post.title || "Untitled")}</h1>
+              <p class="aero-deck">${escapeHtml(post.excerpt || "")}</p>
+              <div class="aero-meta"><span>${formatDate(post.date)}</span><span> TBRLUCAS EDITORIAL</span><span> AERO COLLECTION</span></div>
+              <div class="aero-hero-orb aero-orb-one"></div><div class="aero-hero-orb aero-orb-two"></div>
+            </section>
+            <section class="aero-window">
+              <div class="aero-window-chrome"><div class="aero-window-dots"><i></i><i></i><i></i></div><span>ARTICLE VIEWER</span><span class="aero-window-status">GLASS INTERFACE</span></div>
+              <div class="aero-content-layout">
+                <div class="aero-article-content">${content}</div>
+                <aside class="aero-sidebar">
+                  <div class="aero-side-glass"><p class="aero-side-label">IN THIS FEATURE</p><strong>Windows 7</strong><p>From the Longhorn development reset to the operating system's lasting place in PC history.</p><div class="aero-side-rule"></div><span>HISTORY · DESIGN · LEGACY</span></div>
+                  <div class="aero-side-glass aero-side-note"><span class="aero-side-label">THE AERO COLLECTION</span><p>A special visual edition from the tbrlucas technology journal.</p></div>
+                  <a class="aero-back-link" href="/blog/">← Back to all articles</a>
+                </aside>
+              </div>
+              <footer class="aero-window-footer"><span>tbrlucas</span><span>DESIGNED WITH AERO GLASS</span></footer>
+            </section>
+            <footer class="aero-page-footer"><a href="/">tbrlucas home</a><span>Independent technology journal</span></footer>`;
         } else if (theme === "ios-6") {
           document.body.classList.add("ios6-blog-page");
           article.className = "ios6-article-shell";
