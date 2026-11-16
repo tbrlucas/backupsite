@@ -14,7 +14,7 @@
     return new Date(Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3])))
       .toLocaleDateString("en-US", {month:"short", day:"numeric", year:"numeric", timeZone:"UTC"});
   };
-  const postUrl = (post) => "/blog/post.html?slug=" + encodeURIComponent(post.slug || "");
+  const postUrl = (post) => "/backupsite/blog/post.html?slug=" + encodeURIComponent(post.slug || "");
 
   // Small, safe Markdown-style renderer for the formatting supported by the blog editor.
   const renderInline = (value) => {
@@ -74,7 +74,7 @@
       </article>`;
   };
 
-  fetch("/assets/data/posts.json?v=20261115-market-markdown", { cache: "no-store" })
+  fetch("/backupsite/assets/data/posts.json?v=20261115-market-markdown", { cache: "no-store" })
     .then((response) => {
       if (!response.ok) throw new Error("Could not load the posts file.");
       return response.json();
@@ -145,7 +145,7 @@
                 <span class="active">FEATURED</span><span>APPS</span><span>GAMES</span><span>MY LIBRARY</span>
               </nav>
             </div>
-            <div class="market-breadcrumb"><a href="/">Home</a><span>›</span><a href="/blog/">Blog</a><span>›</span><span>Article</span></div>
+            <div class="market-breadcrumb"><a href="/backupsite/">Home</a><span>›</span><a href="/backupsite/blog/">Blog</a><span>›</span><span>Article</span></div>
             <div class="market-detail-card">
               <header class="market-app-heading">
                 <div class="market-app-icon" aria-hidden="true"><span>tbrlucas</span><strong>Blog</strong></div>
@@ -166,7 +166,7 @@
                     <div class="market-side-line"><span>FORMAT</span><strong>Article</strong></div>
                   </div>
                   <div class="market-side-note"><strong>Keep exploring</strong><p>Discover more articles and stories from the tbrlucas blog.</p></div>
-                  <a class="market-back-link" href="/blog/">‹ Back to all articles</a>
+                  <a class="market-back-link" href="/backupsite/blog/">‹ Back to all articles</a>
                 </aside>
               </div>
               <footer class="market-card-footer">ANDROID MARKET STYLE · TBRLUCAS BLOG</footer>
@@ -177,9 +177,9 @@
           article.innerHTML = `
             <div class="aero-atmosphere" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
             <header class="aero-topbar">
-              <a class="aero-brand" href="/"><span class="aero-brand-orb"></span><span><strong>tbrlucas</strong><small>TECHNOLOGY JOURNAL</small></span></a>
+              <a class="aero-brand" href="/backupsite/"><span class="aero-brand-orb"></span><span><strong>tbrlucas</strong><small>TECHNOLOGY JOURNAL</small></span></a>
               <span class="aero-edition-label">AERO SPECIAL EDITION</span>
-              <a class="aero-index-link" href="/blog/">All articles <span aria-hidden="true">→</span></a>
+              <a class="aero-index-link" href="/backupsite/blog/">All articles <span aria-hidden="true">→</span></a>
             </header>
             <section class="aero-hero">
               <p class="aero-kicker"><span></span> FEATURE STORY · WINDOWS</p>
@@ -195,22 +195,22 @@
                 <aside class="aero-sidebar">
                   <div class="aero-side-glass"><p class="aero-side-label">IN THIS FEATURE</p><strong>Windows 7</strong><p>From the Longhorn development reset to the operating system's lasting place in PC history.</p><div class="aero-side-rule"></div><span>HISTORY · DESIGN · LEGACY</span></div>
                   <div class="aero-side-glass aero-side-note"><span class="aero-side-label">THE AERO COLLECTION</span><p>A special visual edition from the tbrlucas technology journal.</p></div>
-                  <a class="aero-back-link" href="/blog/">← Back to all articles</a>
+                  <a class="aero-back-link" href="/backupsite/blog/">← Back to all articles</a>
                 </aside>
               </div>
               <footer class="aero-window-footer"><span>tbrlucas</span><span>DESIGNED WITH AERO GLASS</span></footer>
             </section>
-            <footer class="aero-page-footer"><a href="/">tbrlucas home</a><span>Independent technology journal</span></footer>`;
+            <footer class="aero-page-footer"><a href="/backupsite/">tbrlucas home</a><span>Independent technology journal</span></footer>`;
         } else if (theme === "cydia-classic") {
           document.body.classList.add("cydia-classic-page");
           article.className = "cydia-article-shell";
           article.innerHTML = `
             <header class="cydia-topbar">
-              <a class="cydia-brand" href="/"><span class="cydia-mark">C</span><span><strong>Cydia</strong><small>tbrlucas blog edition</small></span></a>
-              <a class="cydia-index-link" href="/blog/">All articles</a>
+              <a class="cydia-brand" href="/backupsite/"><span class="cydia-mark">C</span><span><strong>Cydia</strong><small>tbrlucas blog edition</small></span></a>
+              <a class="cydia-index-link" href="/backupsite/blog/">All articles</a>
             </header>
             <nav class="cydia-tabs" aria-label="Article sections"><span class="active">ARTICLE</span><span>DISCOVER</span><span>COMMUNITY</span></nav>
-            <div class="cydia-breadcrumb"><a href="/">Home</a><span>›</span><a href="/blog/">Blog</a><span>›</span><span>Article</span></div>
+            <div class="cydia-breadcrumb"><a href="/backupsite/">Home</a><span>›</span><a href="/backupsite/blog/">Blog</a><span>›</span><span>Article</span></div>
             <section class="cydia-app-panel">
               <header class="cydia-app-heading">
                 <div class="cydia-app-icon" aria-hidden="true"><span>t</span></div>
@@ -222,32 +222,32 @@
                 <aside class="cydia-sidebar">
                   <div class="cydia-info-panel"><h2>ABOUT THIS ARTICLE</h2><p>${escapeHtml(post.excerpt || "An article from the tbrlucas blog.")}</p><div><span>CATEGORY</span><strong>Technology</strong></div><div><span>EDITION</span><strong>Cydia Classic</strong></div></div>
                   <div class="cydia-note"><strong>From the archive</strong><p>Exploring the software, ideas and communities that shaped mobile technology.</p></div>
-                  <a class="cydia-back-link" href="/blog/">‹ Back to all articles</a>
+                  <a class="cydia-back-link" href="/backupsite/blog/">‹ Back to all articles</a>
                 </aside>
               </div>
               <footer class="cydia-card-footer"><span>tbrlucas</span><span>INSPIRED BY CLASSIC CYDIA</span></footer>
             </section>
-            <footer class="cydia-page-footer"><a href="/">tbrlucas home</a><span>Independent technology journal</span></footer>`;
+            <footer class="cydia-page-footer"><a href="/backupsite/">tbrlucas home</a><span>Independent technology journal</span></footer>`;
         } else if (theme === "ios-6") {
           document.body.classList.add("ios6-blog-page");
           article.className = "ios6-article-shell";
           article.innerHTML = `
-            <div class="ios6-blog-top"><span class="ios6-blog-mark">t</span><span>tbrlucas <small> / BLOG</small></span><a href="/blog/">All articles</a></div>
+            <div class="ios6-blog-top"><span class="ios6-blog-mark">t</span><span>tbrlucas <small> / BLOG</small></span><a href="/backupsite/blog/">All articles</a></div>
             <div class="ios6-article-card">
               <div class="ios6-article-toolbar"><span>ARTICLE</span><span>${formatDate(post.date)}</span></div>
               <header class="ios6-article-heading"><p>tbrlucas blog</p><h1>${escapeHtml(post.title || "Untitled")}</h1><div>${escapeHtml(post.excerpt || "")}</div></header>
               <div class="ios6-article-content">${content}</div>
-              <footer><a href="/blog/">‹ Back to the blog</a><span>Designed with an iOS 6-inspired look</span></footer>
+              <footer><a href="/backupsite/blog/">‹ Back to the blog</a><span>Designed with an iOS 6-inspired look</span></footer>
             </div>`;
         } else if (theme === "dark-2010s") {
           document.body.classList.add("dark-2010s-blog-page");
           article.className = "dark2010-article-shell";
           article.innerHTML = `
-            <div class="dark2010-topbar"><a href="/">tbrlucas</a><span>PERSONAL BLOG / ${formatDate(post.date)}</span><a href="/blog/">← Blog index</a></div>
+            <div class="dark2010-topbar"><a href="/backupsite/">tbrlucas</a><span>PERSONAL BLOG / ${formatDate(post.date)}</span><a href="/backupsite/blog/">← Blog index</a></div>
             <header class="dark2010-heading"><p>THOUGHTS, NOTES & TECHNOLOGY</p><h1>${escapeHtml(post.title || "Untitled")}</h1><div>${escapeHtml(post.excerpt || "")}</div></header>
             <div class="dark2010-rule"></div>
             <div class="dark2010-content">${content}</div>
-            <footer class="dark2010-footer"><a href="/blog/">← Back to all posts</a><span>tbrlucas · independent blog</span></footer>`;
+            <footer class="dark2010-footer"><a href="/backupsite/blog/">← Back to all posts</a><span>tbrlucas · independent blog</span></footer>`;
         } else {
           article.className = "well article-panel";
           article.innerHTML = `<div class="copy-panel"><p class="blog-list-meta">${formatDate(post.date)}</p><h1>${escapeHtml(post.title || "Untitled")}</h1><p class="article-excerpt">${escapeHtml(post.excerpt || "")}</p><div class="blog-article-content">${content}</div></div>`;
