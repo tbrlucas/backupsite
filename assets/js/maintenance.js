@@ -33,15 +33,15 @@
                 <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse" aria-label="Toggle navigation">
                   <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
                 </button>
-                <a class="brand" href="/">tbrlucas</a>
+                <a class="brand" href="/backupsite/">tbrlucas</a>
                 <div class="nav-collapse collapse">
                   <ul class="nav">
-                    <li class="active"><a href="/">Home</a></li>
-                    <li><a href="/projects/">Projects</a></li>
-                    <li><a href="/downloads/">Downloads</a></li>
-                    <li><a href="/blog/">Blog</a></li>
-                    <li><a href="/whats-new/">What’s New</a></li>
-                    <li><a href="/about/">About</a></li>
+                    <li class="active"><a href="/backupsite/">Home</a></li>
+                    <li><a href="/backupsite/projects/">Projects</a></li>
+                    <li><a href="/backupsite/downloads/">Downloads</a></li>
+                    <li><a href="/backupsite/blog/">Blog</a></li>
+                    <li><a href="/backupsite/whats-new/">What’s New</a></li>
+                    <li><a href="/backupsite/about/">About</a></li>
                   </ul>
                 </div>
               </div>
@@ -81,7 +81,7 @@
 
           <footer class="site-footer">
             <ul class="breadcrumb"><li class="active">Temporarily unavailable</li></ul>
-            <p><strong>© tbrlucas</strong> · <a href="/about/">learn more about this site</a> · <span>${new Date().getFullYear()}</span></p>
+            <p><strong>© tbrlucas</strong> · <a href="/backupsite/about/">learn more about this site</a> · <span>${new Date().getFullYear()}</span></p>
           </footer>
         </main>`;
 
@@ -112,7 +112,7 @@
 
       const stylesheet = document.createElement("link");
       stylesheet.rel = "stylesheet";
-      stylesheet.href = "/assets/css/maintenance.css?v=20261115-1";
+      stylesheet.href = "/backupsite/assets/css/maintenance.css?v=20261115-1";
       stylesheet.addEventListener("load", reveal, {once:true});
       stylesheet.addEventListener("error", reveal, {once:true});
       document.head.appendChild(stylesheet);
