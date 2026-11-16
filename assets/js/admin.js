@@ -264,9 +264,9 @@
       const access = await api("/api/upload-token");
       const originalName = String(file.name || "download.bin").split(/[\\\\/]/).pop();
       const safeName = originalName.normalize("NFKD").replace(/[^a-zA-Z0-9._-]+/g,"-").replace(/^-+|-+$/g,"").slice(0,120) || "download.bin";
-      const filePath = "downloads/files/" + slug + "/" + safeName;
-      const encodedPath = filePath.split("/").map(encodeURIComponent).join("/");
-      const apiUrl = "https://api.github.com/repos/" + encodeURIComponent(access.owner) + "/" + encodeURIComponent(access.repo) + "/contents/" + encodedPath;
+      const filePath = "downloads/files/" + slug + "/backupsite/" + safeName;
+      const encodedPath = filePath.split("/backupsite/").map(encodeURIComponent).join("/backupsite/");
+      const apiUrl = "https://api.github.com/repos/" + encodeURIComponent(access.owner) + "/backupsite/" + encodeURIComponent(access.repo) + "/contents/" + encodedPath;
       const authHeaders = {Authorization:"Bearer " + access.token, Accept:"application/vnd.github+json", "X-GitHub-Api-Version":"2022-11-28"};
       let existingSha = "";
       const existingResponse = await fetch(apiUrl + "?ref=main", {headers:authHeaders});
@@ -301,7 +301,7 @@
       const response = await fetch(apiUrl, {method:"PUT", headers:{...authHeaders, "Content-Type":"application/json"}, body:payload});
       const result = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(result.message || "GitHub rejected the upload (" + response.status + ").");
-      const publicUrl = location.origin + siteBase + filePath.split("/").map(encodeURIComponent).join("/");
+      const publicUrl = location.origin + siteBase + filePath.split("/backupsite/").map(encodeURIComponent).join("/backupsite/");
       $("download-url").value = publicUrl;
       $("download-size").value = (file.size / (1024 * 1024)).toFixed(1) + " MB";
       $("download-type").value = safeName.includes(".") ? safeName.split(".").pop().toUpperCase() : "FILE";
@@ -493,8 +493,8 @@
       maintenanceMessage("Saving settings to GitHub…");
       const access = await api("/api/upload-token");
       const filePath = "assets/data/maintenance.json";
-      const encodedPath = filePath.split("/").map(encodeURIComponent).join("/");
-      const apiUrl = "https://api.github.com/repos/" + encodeURIComponent(access.owner) + "/" + encodeURIComponent(access.repo) + "/contents/" + encodedPath;
+      const encodedPath = filePath.split("/backupsite/").map(encodeURIComponent).join("/backupsite/");
+      const apiUrl = "https://api.github.com/repos/" + encodeURIComponent(access.owner) + "/backupsite/" + encodeURIComponent(access.repo) + "/contents/" + encodedPath;
       const headers = {Authorization:"Bearer " + access.token, Accept:"application/vnd.github+json", "X-GitHub-Api-Version":"2022-11-28"};
       const currentResponse = await fetch(apiUrl + "?ref=main", {headers});
       if (!currentResponse.ok) throw new Error("Could not read the current settings (" + currentResponse.status + ").");
