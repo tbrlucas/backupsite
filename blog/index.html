@@ -55,12 +55,17 @@
         <p>Every published article, each in its own card.</p>
       </div>
     </div>
+    <div class="blog-tools">
+      <label class="blog-search-label" for="blog-search">Search articles</label>
+      <input id="blog-search" class="blog-search-input" type="search" placeholder="Search by title or topic…" autocomplete="off">
+      <span id="blog-search-results" class="blog-search-results" aria-live="polite"></span>
+    </div>
     <div class="blog-post-grid" id="blog-post-list" aria-live="polite"><p class="post-empty">Loading posts…</p></div>
   </section>
   <p class="back-home"><a href="/backupsite/">← Back to tbrlucas</a></p>
 </main>
 <script src="../assets/js/main.js" defer></script>
-<script src="../assets/js/blog.js?v=20261115-cydia-classic" defer></script>
+<script src="../assets/js/blog.js?v=20261118-blog-search" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 <script>
