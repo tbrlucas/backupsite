@@ -74,7 +74,7 @@
       </article>`;
   };
 
-  fetch("/backupsite/assets/data/posts.json?v=20261115-market-markdown", { cache: "no-store" })
+  fetch("/backupsite/assets/data/posts.json?v=20261118-blog-search", { cache: "no-store" })
     .then((response) => {
       if (!response.ok) throw new Error("Could not load the posts file.");
       return response.json();
@@ -86,9 +86,25 @@
 
       if (count) count.textContent = posts.length + (posts.length === 1 ? " published post" : " published posts");
       if (postList) {
-        postList.innerHTML = posts.length
-          ? posts.map(cardMarkup).join("")
-          : '<p class="post-empty">There are no published posts yet. Check back soon!</p>';
+        const searchInput = document.getElementById("blog-search");
+        const searchResults = document.getElementById("blog-search-results");
+        const renderPostList = () => {
+          const term = String(searchInput?.value || "").trim().toLocaleLowerCase();
+          const filtered = term ? posts.filter((post) =>
+            [post.title, post.excerpt, post.content, post.date]
+              .some((value) => String(value || "").toLocaleLowerCase().includes(term))
+          ) : posts;
+          postList.innerHTML = filtered.length
+            ? filtered.map(cardMarkup).join("")
+            : '<p class="post-empty">No articles match your search. Try another word.</p>';
+          if (searchResults) {
+            searchResults.textContent = term
+              ? filtered.length + (filtered.length === 1 ? " result" : " results")
+              : "Showing all " + posts.length + (posts.length === 1 ? " article" : " articles");
+          }
+        };
+        if (searchInput) searchInput.addEventListener("input", renderPostList);
+        renderPostList();
       }
       if (homeList) {
         const latest = posts.slice(0, 3);
