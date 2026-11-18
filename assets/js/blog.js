@@ -17,8 +17,23 @@
   const postUrl = (post) => "/backupsite/blog/post.html?slug=" + encodeURIComponent(post.slug || "");
 
   // Small, safe Markdown-style renderer for the formatting supported by the blog editor.
+  const safeMarkdownUrl = (value, image = false) => {
+    const url = String(value || "").trim();
+    if (/^https:\/\//i.test(url)) return escapeHtml(url);
+    if (!image && /^\/backupsite\//.test(url)) return escapeHtml(url);
+    if (image && /^\/backupsite\/assets\/images\//.test(url)) return escapeHtml(url);
+    return "";
+  };
   const renderInline = (value) => {
     let text = escapeHtml(value);
+    text = text.replace(/!\[([^\]]*)\]\((https:\/\/[^)\s]+|\/backupsite\/assets\/images\/[^)\s]+)\)/g, (match, alt, url) => {
+      const safe = safeMarkdownUrl(url, true);
+      return safe ? '<img class="blog-inline-image" src="' + safe + '" alt="' + alt + '" loading="lazy">' : alt;
+    });
+    text = text.replace(/\[([^\]]+)\]\((https:\/\/[^)\s]+|\/backupsite\/[^)\s]+)\)/g, (match, label, url) => {
+      const safe = safeMarkdownUrl(url, false);
+      return safe ? '<a href="' + safe + '" target="_blank" rel="noopener noreferrer">' + label + '</a>' : label;
+    });
     text = text.replace(/\*\*\*(.+?)\*\*\*/g, "<strong><em>$1</em></strong>");
     text = text.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
     text = text.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, "$1<em>$2</em>");
@@ -67,6 +82,7 @@
     const themeLabels = {"default":"Default theme","ios-6":"iOS 6 edition","android-market-2012":"Android Market 2012 edition","dark-2010s":"Dark 2010s edition","aero":"Aero special edition","cydia-classic":"Cydia Classic edition"};
     return `
       <article class="blog-card blog-card-${escapeHtml(theme)}">
+        ${safeMarkdownUrl(post.coverImage, true) ? '<a class="blog-card-cover-link" href="' + postUrl(post) + '"><img class="blog-card-cover" src="' + safeMarkdownUrl(post.coverImage, true) + '" alt="" loading="lazy"></a>' : ''}
         <div class="blog-card-meta"><span>${formatDate(post.date)}</span><span>${escapeHtml(themeLabels[theme] || "Blog post")}</span></div>
         <h3><a href="${postUrl(post)}">${escapeHtml(post.title || "Untitled")}</a></h3>
         <p>${escapeHtml(post.excerpt || "")}</p>
@@ -145,7 +161,8 @@
           return;
         }
 
-        const content = renderContent(post.content);
+        const coverImage = safeMarkdownUrl(post.coverImage, true);
+        const content = (coverImage ? '<figure class="blog-cover-figure"><img class="blog-cover-image" src="' + coverImage + '" alt="' + escapeHtml(post.title || "Article cover") + '"></figure>' : '') + renderContent(post.content);
         const theme = post.design || "default";
         if (theme === "android-market-2012") {
           document.body.classList.add("android-market-page");
