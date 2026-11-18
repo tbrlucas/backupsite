@@ -268,6 +268,19 @@
           article.className = "well article-panel";
           article.innerHTML = `<div class="copy-panel"><p class="blog-list-meta">${formatDate(post.date)}</p><h1>${escapeHtml(post.title || "Untitled")}</h1><p class="article-excerpt">${escapeHtml(post.excerpt || "")}</p><div class="blog-article-content">${content}</div></div>`;
         }
+        const currentIndex = posts.findIndex((item) => item.slug === post.slug);
+        const newerPost = currentIndex > 0 ? posts[currentIndex - 1] : null;
+        const olderPost = currentIndex >= 0 && currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null;
+        const navigation = document.createElement("nav");
+        navigation.className = "blog-post-navigation";
+        navigation.setAttribute("aria-label", "More blog articles");
+        navigation.innerHTML = `
+          <div class="blog-post-navigation-heading"><span>KEEP READING</span><a href="/backupsite/blog/">All articles</a></div>
+          <div class="blog-post-navigation-links">
+            ${newerPost ? `<a class="blog-post-nav-item" href="${postUrl(newerPost)}"><span>← NEWER ARTICLE</span><strong>${escapeHtml(newerPost.title || "Untitled")}</strong></a>` : '<span class="blog-post-nav-empty">You are viewing the newest article.</span>'}
+            ${olderPost ? `<a class="blog-post-nav-item blog-post-nav-older" href="${postUrl(olderPost)}"><span>OLDER ARTICLE →</span><strong>${escapeHtml(olderPost.title || "Untitled")}</strong></a>` : '<span class="blog-post-nav-empty">You are viewing the oldest article.</span>'}
+          </div>`;
+        article.appendChild(navigation);
         document.title = `tbrlucas :: ${post.title || "blog post"}`;
       }
     })
