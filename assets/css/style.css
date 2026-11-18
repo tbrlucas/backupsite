@@ -769,3 +769,12 @@ html[data-theme="dark"] .dark2010-content strong,
 html[data-theme="dark"] .blog-article-content strong {
   color:#edf3fa;
 }
+
+
+/* Blog search controls */
+.blog-tools { display:flex; flex-wrap:wrap; align-items:center; gap:9px 14px; margin:0 0 16px; }
+.blog-search-label { margin:0; color:#596879; font-size:12px; font-weight:bold; }
+.blog-search-input { box-sizing:border-box; width:100%; max-width:360px; height:36px; margin:0; padding:7px 11px; border:1px solid #cfd7e0; border-radius:4px; background:#fff; color:#263445; box-shadow:none; }
+.blog-search-input:focus { border-color:#4f7fbf; outline:0; box-shadow:0 0 0 2px rgba(79,127,191,.14); }
+.blog-search-results { color:#8793a0; font-size:12px; }
+@media (max-width:480px) { .blog-search-input { max-width:none; } }
