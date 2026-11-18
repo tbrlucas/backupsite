@@ -90,7 +90,7 @@
       </article>`;
   };
 
-  fetch("/backupsite/assets/data/posts.json?v=20261118-blog-search", { cache: "no-store" })
+  fetch("/backupsite/assets/data/posts.json?v=20261118-media-links", { cache: "no-store" })
     .then((response) => {
       if (!response.ok) throw new Error("Could not load the posts file.");
       return response.json();
