@@ -335,7 +335,7 @@
       const safeName = originalName.normalize("NFKD").replace(/[^a-zA-Z0-9._-]+/g,"-").replace(/^-+|-+$/g,"").slice(0,120) || "download.bin";
       const filePath = "downloads/files/" + slug + "/backupsite/" + safeName;
       const encodedPath = filePath.split("/backupsite/").map(encodeURIComponent).join("/backupsite/");
-      const apiUrl = "https://api.github.com/repos/" + encodeURIComponent(access.owner) + "/backupsite/" + encodeURIComponent(access.repo) + "/contents/" + encodedPath;
+      const apiUrl = "https://api.github.com/repos/" + encodeURIComponent(access.owner) + "/" + encodeURIComponent(access.repo) + "/contents/" + encodedPath;
       const authHeaders = {Authorization:"Bearer " + access.token, Accept:"application/vnd.github+json", "X-GitHub-Api-Version":"2022-11-28"};
       let existingSha = "";
       const existingResponse = await fetch(apiUrl + "?ref=main", {headers:authHeaders});
